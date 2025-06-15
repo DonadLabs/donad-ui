@@ -132,7 +132,7 @@ export default function StartFundraisingPage() {
                           />
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-4">
+                        {/* <div className="grid md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="category">Kategori *</Label>
                             <Select>
@@ -154,7 +154,7 @@ export default function StartFundraisingPage() {
                             <Label htmlFor="location">Lokasi *</Label>
                             <Input id="location" placeholder="Kota, Provinsi" />
                           </div>
-                        </div>
+                        </div> */}
                       </div>
 
                       <Separator />
