@@ -3,46 +3,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Shield, Users, TrendingUp, Clock, FileText, Zap } from "lucide-react"
 import Link from "next/link"
+import { NavBar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <Link href="/" className="flex items-center justify-center">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-teal-600 rounded-lg flex items-center justify-center">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
-          <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-            FundChain
-          </span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link href="#how-it-works" className="text-sm font-medium hover:text-blue-600 transition-colors">
-            Cara Kerja
-          </Link>
-          <Link href="#features" className="text-sm font-medium hover:text-blue-600 transition-colors">
-            Fitur
-          </Link>
-          <Link href="#about" className="text-sm font-medium hover:text-blue-600 transition-colors">
-            Tentang
-          </Link>
-        </nav>
-      </header>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
+      <NavBar />
 
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-8 text-center">
-              <Badge variant="outline" className="px-4 py-2 text-blue-600 border-blue-200">
+              <Badge variant="outline" className="px-4 py-2 text-purple-600 border-purple-200">
                 <Zap className="w-4 h-4 mr-2" />
                 Platform Fundraising Web3
               </Badge>
 
               <div className="space-y-6 max-w-4xl">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">
-                  Transparansi Fundraising dengan Blockchain
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">  Transparansi Fundraising dengan Blockchain
                 </h1>
 
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-3xl mx-auto">
@@ -50,7 +30,7 @@ export default function LandingPage() {
                     💔 <strong>Masalah Saat Ini:</strong>
                   </p>
                   <p className="text-red-600 mt-2">
-                    "Transaksi dari fundraiser tidak terintegrasi sehingga menyulitkan transparansi."
+                    &ldquo;Transaksi dari fundraiser tidak terintegrasi sehingga menyulitkan transparansi.&rdquo;
                   </p>
                 </div>
 
@@ -64,7 +44,7 @@ export default function LandingPage() {
                 <Link href="/explore-donation">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 text-lg"
+                    className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-8 py-3 text-lg"
                   >
                     Explore Donation
                   </Button>
@@ -73,7 +53,7 @@ export default function LandingPage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-blue-200 text-blue-600 hover:bg-blue-50 px-8 py-3 text-lg"
+                    className="border-purple-200 text-purple-600 hover:bg-purple-50 px-8 py-3 text-lg"
                   >
                     Start Fundraising
                   </Button>
@@ -101,10 +81,10 @@ export default function LandingPage() {
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
               {/* Reputasi Fundraiser */}
-              <Card className="border-2 hover:border-blue-200 transition-colors">
+              <Card className="border-2 hover:border-purple-200 transition-colors">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <Shield className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle className="text-xl">Reputasi Fundraiser</CardTitle>
                 </CardHeader>
@@ -119,10 +99,10 @@ export default function LandingPage() {
               </Card>
 
               {/* Reputasi Donatur */}
-              <Card className="border-2 hover:border-teal-200 transition-colors">
+              <Card className="border-2 hover:border-purple-300 transition-colors">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                    <Users className="h-6 w-6 text-teal-600" />
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <Users className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle className="text-xl">Reputasi Donatur</CardTitle>
                 </CardHeader>
@@ -137,7 +117,7 @@ export default function LandingPage() {
               </Card>
 
               {/* Transparansi Keuangan */}
-              <Card className="border-2 hover:border-purple-200 transition-colors">
+              <Card className="border-2 hover:border-purple-300 transition-colors">
                 <CardHeader>
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                     <FileText className="h-6 w-6 text-purple-600" />
@@ -152,10 +132,10 @@ export default function LandingPage() {
               </Card>
 
               {/* Penarikan Dana */}
-              <Card className="border-2 hover:border-orange-200 transition-colors">
+              <Card className="border-2 hover:border-purple-300 transition-colors">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                    <Clock className="h-6 w-6 text-orange-600" />
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <Clock className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle className="text-xl">Penarikan Dana</CardTitle>
                 </CardHeader>
@@ -167,10 +147,10 @@ export default function LandingPage() {
               </Card>
 
               {/* Smart Contract */}
-              <Card className="border-2 hover:border-green-200 transition-colors md:col-span-2 lg:col-span-1">
+              <Card className="border-2 hover:border-purple-300 transition-colors md:col-span-2 lg:col-span-1">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <TrendingUp className="h-6 w-6 text-green-600" />
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <TrendingUp className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle className="text-xl">Smart Contract</CardTitle>
                 </CardHeader>
@@ -185,17 +165,17 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-purple-50 to-white">
           <div className="container px-4 md:px-6">
             <div className="grid gap-10 lg:grid-cols-2 items-center">
               <div className="space-y-6">
-                <Badge variant="outline" className="px-4 py-2 text-blue-600 border-blue-200">
+                <Badge variant="outline" className="px-4 py-2 text-purple-600 border-purple-200">
                   Keunggulan Platform
                 </Badge>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Mengapa Memilih FundChain?</h2>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs font-bold">✓</span>
                     </div>
                     <div>
@@ -206,7 +186,7 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs font-bold">✓</span>
                     </div>
                     <div>
@@ -235,12 +215,12 @@ export default function LandingPage() {
                   </div>
                   <div className="space-y-4">
                     <Link href="/explore-donation">
-                      <Button className="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white py-3">
+                      <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white py-3">
                         Explore Donation
                       </Button>
                     </Link>
                     <Link href="/start-fundraising">
-                      <Button variant="outline" className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 py-3">
+                      <Button variant="outline" className="w-full border-purple-200 text-purple-600 hover:bg-purple-50 py-3">
                         Start Fundraising
                       </Button>
                     </Link>
@@ -255,26 +235,26 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-600 to-teal-600">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-purple-600 to-purple-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
                 Siap Memulai Fundraising yang Transparan?
               </h2>
-              <p className="max-w-2xl text-blue-100 md:text-xl">
+              <p className="max-w-2xl text-purple-100 md:text-xl">
                 Bergabunglah dengan revolusi fundraising berbasis blockchain. Bangun kepercayaan, tingkatkan
                 transparansi, dan capai target fundraising Anda.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/explore-donation">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 text-lg font-semibold">
+                  <Button size="lg" className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-3 text-lg font-semibold">
                     Explore Donation
                   </Button>
                 </Link>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 text-lg"
+                  className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-3 text-lg"
                 >
                   Pelajari Lebih Lanjut
                 </Button>
@@ -284,30 +264,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-white">
-        <p className="text-xs text-muted-foreground">© 2024 FundChain. Semua hak dilindungi.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link
-            href="#"
-            className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
-          >
-            Syarat & Ketentuan
-          </Link>
-          <Link
-            href="#"
-            className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
-          >
-            Kebijakan Privasi
-          </Link>
-          <Link
-            href="#"
-            className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
-          >
-            Kontak
-          </Link>
-        </nav>
-      </footer>
+      <Footer />
     </div>
   )
 }

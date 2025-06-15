@@ -1,13 +1,20 @@
-"use client"
+/* eslint-disable @next/next/no-img-element */
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Shield,
   TrendingUp,
@@ -21,11 +28,13 @@ import {
   ArrowLeft,
   CheckCircle,
   Calendar,
-} from "lucide-react"
-import Link from "next/link"
-import { Progress } from "@/components/ui/progress"
-import { useState } from "react"
-import { useParams } from "next/navigation"
+} from "lucide-react";
+import Link from "next/link";
+import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import { NavBar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 // Mock data for campaigns (same as explore page)
 const campaigns = [
@@ -51,25 +60,43 @@ const campaigns = [
       {
         date: "2024-01-20",
         title: "Update Progress Minggu Pertama",
-        content: "Terima kasih untuk semua donatur yang telah berpartisipasi. Kami telah mencapai 45% dari target!",
+        content:
+          "Terima kasih untuk semua donatur yang telah berpartisipasi. Kami telah mencapai 45% dari target!",
       },
       {
         date: "2024-01-18",
         title: "Dokumentasi Kunjungan Lapangan",
-        content: "Tim kami telah mengunjungi sekolah-sekolah dan bertemu dengan anak-anak yang akan dibantu.",
+        content:
+          "Tim kami telah mengunjungi sekolah-sekolah dan bertemu dengan anak-anak yang akan dibantu.",
       },
     ],
     milestones: [
-      { percentage: 25, description: "Pembelian seragam dan perlengkapan sekolah", completed: true },
-      { percentage: 50, description: "Pembayaran biaya SPP semester pertama", completed: false },
-      { percentage: 75, description: "Pembelian buku dan alat tulis", completed: false },
-      { percentage: 100, description: "Biaya transportasi dan operasional", completed: false },
+      {
+        percentage: 25,
+        description: "Pembelian seragam dan perlengkapan sekolah",
+        completed: true,
+      },
+      {
+        percentage: 50,
+        description: "Pembayaran biaya SPP semester pertama",
+        completed: false,
+      },
+      {
+        percentage: 75,
+        description: "Pembelian buku dan alat tulis",
+        completed: false,
+      },
+      {
+        percentage: 100,
+        description: "Biaya transportasi dan operasional",
+        completed: false,
+      },
     ],
   },
   // Add other campaigns here...
-]
+];
 
-const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000]
+const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000];
 
 function formatCurrency(amount: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -77,70 +104,56 @@ function formatCurrency(amount: number) {
     currency: "IDR",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount)
+  }).format(amount);
 }
 
 export default function DonatePage() {
-  const params = useParams()
-  const campaignId = Number.parseInt(params.id as string)
-  const campaign = campaigns.find((c) => c.id === campaignId)
+  const params = useParams();
+  const campaignId = Number.parseInt(params.id as string);
+  const campaign = campaigns.find((c) => c.id === campaignId);
 
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
-  const [customAmount, setCustomAmount] = useState("")
-  const [donorName, setDonorName] = useState("")
-  const [donorMessage, setDonorMessage] = useState("")
-  const [paymentMethod, setPaymentMethod] = useState("")
-  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState("");
+  const [donorName, setDonorName] = useState("");
+  const [donorMessage, setDonorMessage] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
   if (!campaign) {
     return (
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Kampanye tidak ditemukan</h1>
+            <h1 className="text-2xl font-bold mb-4">
+              Kampanye tidak ditemukan
+            </h1>
             <Link href="/explore-donation">
               <Button>Kembali ke Jelajahi Donasi</Button>
             </Link>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  const progressPercentage = Math.round((campaign.raised / campaign.target) * 100)
-  const finalAmount = selectedAmount || Number.parseInt(customAmount) || 0
+  const progressPercentage = Math.round(
+    (campaign.raised / campaign.target) * 100
+  );
+  const finalAmount = selectedAmount || Number.parseInt(customAmount) || 0;
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <Link href="/" className="flex items-center justify-center">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-teal-600 rounded-lg flex items-center justify-center">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
-          <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-            FundChain
-          </span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link href="/" className="text-sm font-medium hover:text-blue-600 transition-colors">
-            Beranda
-          </Link>
-          <Link href="/explore-donation" className="text-sm font-medium hover:text-blue-600 transition-colors">
-            Jelajahi Donasi
-          </Link>
-          <Link href="/start-fundraising" className="text-sm font-medium hover:text-blue-600 transition-colors">
-            Mulai Fundraising
-          </Link>
-        </nav>
-      </header>
+      <NavBar />
 
       <main className="flex-1">
         {/* Breadcrumb */}
         <section className="w-full py-4 bg-white border-b">
           <div className="container px-4 md:px-6">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Link href="/explore-donation" className="hover:text-blue-600 flex items-center gap-1">
+              <Link
+                href="/explore-donation"
+                className="hover:text-blue-600 flex items-center gap-1"
+              >
                 <ArrowLeft className="w-4 h-4" />
                 Kembali ke Jelajahi Donasi
               </Link>
@@ -160,7 +173,9 @@ export default function DonatePage() {
                     alt={campaign.title}
                     className="w-full h-full object-cover rounded-t-lg"
                   />
-                  <Badge className="absolute top-4 left-4 bg-white text-gray-700">{campaign.category}</Badge>
+                  <Badge className="absolute top-4 left-4 bg-white text-gray-700">
+                    {campaign.category}
+                  </Badge>
                   {campaign.verified && (
                     <Badge className="absolute top-4 right-4 bg-green-500 text-white">
                       <Shield className="w-3 h-3 mr-1" />
@@ -171,7 +186,9 @@ export default function DonatePage() {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
-                      <CardTitle className="text-2xl">{campaign.title}</CardTitle>
+                      <CardTitle className="text-2xl">
+                        {campaign.title}
+                      </CardTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
@@ -179,7 +196,10 @@ export default function DonatePage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          Dibuat {new Date(campaign.createdAt).toLocaleDateString("id-ID")}
+                          Dibuat{" "}
+                          {new Date(campaign.createdAt).toLocaleDateString(
+                            "id-ID"
+                          )}
                         </div>
                       </div>
                     </div>
@@ -205,29 +225,43 @@ export default function DonatePage() {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="font-medium">Terkumpul</span>
-                      <span className="font-bold text-lg">{progressPercentage}%</span>
+                      <span className="font-bold text-lg">
+                        {progressPercentage}%
+                      </span>
                     </div>
                     <Progress value={progressPercentage} className="h-3" />
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span className="font-semibold text-lg text-blue-600">{formatCurrency(campaign.raised)}</span>
+                      <span className="font-semibold text-lg text-blue-600">
+                        {formatCurrency(campaign.raised)}
+                      </span>
                       <span>dari {formatCurrency(campaign.target)}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 pt-4 border-t">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">{campaign.donors}</div>
-                      <div className="text-sm text-muted-foreground">Donatur</div>
+                      <div className="text-2xl font-bold text-blue-600">
+                        {campaign.donors}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Donatur
+                      </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-teal-600">{campaign.daysLeft}</div>
-                      <div className="text-sm text-muted-foreground">Hari Tersisa</div>
+                      <div className="text-2xl font-bold text-teal-600">
+                        {campaign.daysLeft}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Hari Tersisa
+                      </div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-purple-600">
                         {formatCurrency(campaign.target - campaign.raised)}
                       </div>
-                      <div className="text-sm text-muted-foreground">Dibutuhkan</div>
+                      <div className="text-sm text-muted-foreground">
+                        Dibutuhkan
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -249,8 +283,12 @@ export default function DonatePage() {
                     </CardHeader>
                     <CardContent>
                       <div className="prose max-w-none">
-                        <p className="text-muted-foreground mb-4">{campaign.description}</p>
-                        <div className="whitespace-pre-line text-sm">{campaign.fullDescription}</div>
+                        <p className="text-muted-foreground mb-4">
+                          {campaign.description}
+                        </p>
+                        <div className="whitespace-pre-line text-sm">
+                          {campaign.fullDescription}
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -261,14 +299,18 @@ export default function DonatePage() {
                     <Card key={index}>
                       <CardHeader>
                         <div className="flex items-center justify-between">
-                          <CardTitle className="text-lg">{update.title}</CardTitle>
+                          <CardTitle className="text-lg">
+                            {update.title}
+                          </CardTitle>
                           <span className="text-sm text-muted-foreground">
                             {new Date(update.date).toLocaleDateString("id-ID")}
                           </span>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground">{update.content}</p>
+                        <p className="text-muted-foreground">
+                          {update.content}
+                        </p>
                       </CardContent>
                     </Card>
                   ))}
@@ -279,25 +321,37 @@ export default function DonatePage() {
                     <CardHeader>
                       <CardTitle>Milestone Pencairan Dana</CardTitle>
                       <CardDescription>
-                        Dana akan dicairkan secara bertahap sesuai dengan milestone yang telah ditetapkan
+                        Dana akan dicairkan secara bertahap sesuai dengan
+                        milestone yang telah ditetapkan
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {campaign.milestones.map((milestone, index) => (
-                        <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center gap-4 p-4 border rounded-lg"
+                        >
                           <div
                             className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              milestone.completed ? "bg-green-500 text-white" : "bg-gray-200 text-gray-600"
+                              milestone.completed
+                                ? "bg-green-500 text-white"
+                                : "bg-gray-200 text-gray-600"
                             }`}
                           >
-                            {milestone.completed ? <CheckCircle className="w-5 h-5" /> : milestone.percentage + "%"}
+                            {milestone.completed ? (
+                              <CheckCircle className="w-5 h-5" />
+                            ) : (
+                              milestone.percentage + "%"
+                            )}
                           </div>
                           <div className="flex-1">
                             <div className="font-medium">
                               {milestone.percentage}% - {milestone.description}
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              {milestone.completed ? "Selesai" : "Menunggu target tercapai"}
+                              {milestone.completed
+                                ? "Selesai"
+                                : "Menunggu target tercapai"}
                             </div>
                           </div>
                         </div>
@@ -313,18 +367,27 @@ export default function DonatePage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {[...Array(5)].map((_, index) => (
-                        <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center gap-4 p-4 border rounded-lg"
+                        >
                           <Avatar>
-                            <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
+                            <AvatarImage
+                              src={`/placeholder.svg?height=40&width=40`}
+                            />
                             <AvatarFallback>D{index + 1}</AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
                             <div className="font-medium">Donatur Anonim</div>
-                            <div className="text-sm text-muted-foreground">2 hari yang lalu</div>
+                            <div className="text-sm text-muted-foreground">
+                              2 hari yang lalu
+                            </div>
                           </div>
                           <div className="text-right">
                             <div className="font-semibold text-blue-600">
-                              {formatCurrency(Math.floor(Math.random() * 500000) + 50000)}
+                              {formatCurrency(
+                                Math.floor(Math.random() * 500000) + 50000
+                              )}
                             </div>
                           </div>
                         </div>
@@ -372,7 +435,9 @@ export default function DonatePage() {
                     <Heart className="w-5 h-5 text-red-500" />
                     Berdonasi Sekarang
                   </CardTitle>
-                  <CardDescription>Pilih jumlah donasi dan metode pembayaran</CardDescription>
+                  <CardDescription>
+                    Pilih jumlah donasi dan metode pembayaran
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Amount Selection */}
@@ -382,11 +447,13 @@ export default function DonatePage() {
                       {donationAmounts.map((amount) => (
                         <Button
                           key={amount}
-                          variant={selectedAmount === amount ? "default" : "outline"}
+                          variant={
+                            selectedAmount === amount ? "default" : "outline"
+                          }
                           className="h-12"
                           onClick={() => {
-                            setSelectedAmount(amount)
-                            setCustomAmount("")
+                            setSelectedAmount(amount);
+                            setCustomAmount("");
                           }}
                         >
                           {formatCurrency(amount)}
@@ -394,15 +461,17 @@ export default function DonatePage() {
                       ))}
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="custom-amount">Atau masukkan jumlah lain</Label>
+                      <Label htmlFor="custom-amount">
+                        Atau masukkan jumlah lain
+                      </Label>
                       <Input
                         id="custom-amount"
                         type="number"
                         placeholder="Masukkan jumlah"
                         value={customAmount}
                         onChange={(e) => {
-                          setCustomAmount(e.target.value)
-                          setSelectedAmount(null)
+                          setCustomAmount(e.target.value);
+                          setSelectedAmount(null);
                         }}
                       />
                     </div>
@@ -448,7 +517,9 @@ export default function DonatePage() {
                     <Label>Metode Pembayaran</Label>
                     <div className="space-y-2">
                       <Button
-                        variant={paymentMethod === "wallet" ? "default" : "outline"}
+                        variant={
+                          paymentMethod === "wallet" ? "default" : "outline"
+                        }
                         className="w-full justify-start"
                         onClick={() => setPaymentMethod("wallet")}
                       >
@@ -456,7 +527,9 @@ export default function DonatePage() {
                         Crypto Wallet
                       </Button>
                       <Button
-                        variant={paymentMethod === "bank" ? "default" : "outline"}
+                        variant={
+                          paymentMethod === "bank" ? "default" : "outline"
+                        }
                         className="w-full justify-start"
                         onClick={() => setPaymentMethod("bank")}
                       >
@@ -464,7 +537,9 @@ export default function DonatePage() {
                         Transfer Bank
                       </Button>
                       <Button
-                        variant={paymentMethod === "ewallet" ? "default" : "outline"}
+                        variant={
+                          paymentMethod === "ewallet" ? "default" : "outline"
+                        }
                         className="w-full justify-start"
                         onClick={() => setPaymentMethod("ewallet")}
                       >
@@ -479,7 +554,9 @@ export default function DonatePage() {
                     <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                       <div className="flex justify-between items-center">
                         <span className="font-medium">Total Donasi:</span>
-                        <span className="text-xl font-bold text-blue-600">{formatCurrency(finalAmount)}</span>
+                        <span className="text-xl font-bold text-blue-600">
+                          {formatCurrency(finalAmount)}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -494,7 +571,8 @@ export default function DonatePage() {
                   </Button>
 
                   <p className="text-xs text-center text-muted-foreground">
-                    Dengan berdonasi, Anda menyetujui syarat dan ketentuan platform
+                    Dengan berdonasi, Anda menyetujui syarat dan ketentuan
+                    platform
                   </p>
                 </CardContent>
               </Card>
@@ -527,30 +605,7 @@ export default function DonatePage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-white">
-        <p className="text-xs text-muted-foreground">© 2024 FundChain. Semua hak dilindungi.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link
-            href="#"
-            className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
-          >
-            Syarat & Ketentuan
-          </Link>
-          <Link
-            href="#"
-            className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
-          >
-            Kebijakan Privasi
-          </Link>
-          <Link
-            href="#"
-            className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
-          >
-            Kontak
-          </Link>
-        </nav>
-      </footer>
+      <Footer />
     </div>
-  )
+  );
 }
