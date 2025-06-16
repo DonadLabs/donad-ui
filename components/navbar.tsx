@@ -59,6 +59,16 @@ export function NavBar() {
         >
           Mulai Fundraising
         </Link>
+        <Link 
+          href="/faucet" 
+          className={`text-sm font-medium transition-colors ${
+            isActive("/faucet") 
+              ? "text-purple-600" 
+              : "hover:text-purple-600"
+          }`}
+        >
+          Faucet
+        </Link>
         <ConnectButton />
       </nav>
     </header>
