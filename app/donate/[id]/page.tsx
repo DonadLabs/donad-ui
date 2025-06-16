@@ -173,10 +173,10 @@ export default function DonatePage() {
                     <div className="space-y-2">
                       <CardTitle className="text-2xl">{campaign.title}</CardTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
+                        {/* <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
                           {campaign.location}
-                        </div>
+                        </div> */}
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           Dibuat {new Date(campaign.createdAt).toLocaleDateString("id-ID")}
@@ -409,7 +409,7 @@ export default function DonatePage() {
                   </div>
 
                   {/* Donor Information */}
-                  <div className="space-y-3">
+                  {/* <div className="space-y-3">
                     <Label htmlFor="donor-name">Nama Donatur</Label>
                     <Input
                       id="donor-name"
@@ -429,10 +429,10 @@ export default function DonatePage() {
                         Donasi sebagai anonim
                       </Label>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Message */}
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="message">Pesan Dukungan (Opsional)</Label>
                     <Textarea
                       id="message"
@@ -441,7 +441,7 @@ export default function DonatePage() {
                       onChange={(e) => setDonorMessage(e.target.value)}
                       className="min-h-[80px]"
                     />
-                  </div>
+                  </div> */}
 
                   {/* Payment Method */}
                   {/* <div className="space-y-3">

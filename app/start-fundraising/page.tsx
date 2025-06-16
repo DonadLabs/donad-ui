@@ -177,21 +177,12 @@ export default function StartFundraisingPage() {
                             <Input id="deadline" type="date" />
                           </div>
                         </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="milestones">Milestone Penarikan Dana</Label>
-                          <Textarea
-                            id="milestones"
-                            placeholder="Jelaskan kapan dan untuk apa dana akan ditarik (contoh: 30% untuk pembelian material, 50% untuk pembangunan, 20% untuk finishing)"
-                            className="min-h-[80px]"
-                          />
-                        </div>
                       </div>
 
-                      <Separator />
+                      {/* <Separator /> */}
 
                       {/* Media Upload */}
-                      <div className="space-y-4">
+                      {/* <div className="space-y-4">
                         <h3 className="text-lg font-semibold flex items-center gap-2">
                           <Upload className="h-5 w-5" />
                           Media & Dokumen
@@ -215,9 +206,9 @@ export default function StartFundraisingPage() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
-                      <Separator />
+                      {/* <Separator /> */}
 
                       {/* Submit */}
                       <div className="flex flex-col sm:flex-row gap-4">
@@ -287,7 +278,7 @@ export default function StartFundraisingPage() {
                   </Card>
 
                   {/* Stats Card */}
-                  <Card className="border-green-200 bg-green-50">
+                  {/* <Card className="border-green-200 bg-green-50">
                     <CardHeader>
                       <CardTitle className="text-lg text-green-700">Statistik Platform</CardTitle>
                     </CardHeader>
@@ -305,7 +296,7 @@ export default function StartFundraisingPage() {
                         <span className="font-semibold text-green-600">2 hari</span>
                       </div>
                     </CardContent>
-                  </Card>
+                  </Card> */}
                 </div>
               </div>
             </div>

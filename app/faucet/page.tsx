@@ -182,7 +182,7 @@ export default function FaucetPage() {
                         <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                           2
                         </div>
-                        <span>Tambahkan network FundChain Testnet ke wallet Anda</span>
+                        <span>Tambahkan network Monad Testnet ke wallet Anda</span>
                       </div>
                       <div className="flex items-start gap-3">
                         <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
@@ -190,17 +190,11 @@ export default function FaucetPage() {
                         </div>
                         <span>Masukkan alamat wallet dan klaim token gratis</span>
                       </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
-                          4
-                        </div>
-                        <span>Gunakan token untuk testing di platform FundChain</span>
-                      </div>
                     </CardContent>
                   </Card>
 
                   {/* Important Notes */}
-                  <Card className="border-orange-200 bg-orange-50">
+                  {/* <Card className="border-orange-200 bg-orange-50">
                     <CardHeader>
                       <CardTitle className="text-lg text-orange-700">Penting!</CardTitle>
                     </CardHeader>
@@ -222,7 +216,7 @@ export default function FaucetPage() {
                         <span>Faucet dapat habis jika terlalu banyak permintaan</span>
                       </div>
                     </CardContent>
-                  </Card>
+                  </Card> */}
                 </div>
               </div>
             </div>
