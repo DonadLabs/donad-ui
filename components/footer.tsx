@@ -1,0 +1,33 @@
+import Link from "next/link"
+import { ConnectButton } from "@rainbow-me/rainbowkit"
+
+export function Footer() {
+  return (
+    <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-white">
+      <p className="text-xs text-muted-foreground">
+        © 2024 FundChain. Semua hak dilindungi.
+      </p>
+      <nav className="sm:ml-auto flex gap-4 sm:gap-6 items-center">
+        <Link
+          href="#"
+          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-purple-600"
+        >
+          Syarat & Ketentuan
+        </Link>
+        <Link
+          href="#"
+          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-purple-600"
+        >
+          Kebijakan Privasi
+        </Link>
+        <Link
+          href="#"
+          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-blue-600"
+        >
+          Kontak
+        </Link>
+        <ConnectButton />
+      </nav>
+    </footer>
+  )
+}
