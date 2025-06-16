@@ -1,4 +1,4 @@
-import { useWriteContract } from "wagmi";
+import { BaseError, useWriteContract} from "wagmi";
 import {
     donContract,
 } from "../contracts/contracts";
@@ -6,7 +6,7 @@ import {
 
 
 export const useWriteFaucetMinting = () => {
-    const { writeContractAsync } = useWriteContract();
+    const { data: hash, error, writeContractAsync } = useWriteContract();
     const FaucetMinting = () => {
         return writeContractAsync({
             address: donContract.address, // ERC20 token address
@@ -15,5 +15,5 @@ export const useWriteFaucetMinting = () => {
             args: []
         });
     }
-    return {FaucetMinting};
+    return {hash, FaucetMinting, error};
 };

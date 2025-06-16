@@ -10,29 +10,41 @@ import { NavBar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useAccount } from "wagmi";
 import { useWriteFaucetMinting } from "@/hooks/writeContracts"
-
-
+import { useReadUserHasMinted } from "@/hooks/readContract"
 
 export default function FaucetPage() {
   const [isLoading, setIsLoading] = useState(false)
   const claimAmount = 100000
   const [showSuccess, setShowSuccess] = useState(false)
   const [showError, setShowError] = useState(false)
-  const {FaucetMinting} = useWriteFaucetMinting()
-  const {isConnected} = useAccount()
+  const [errorMessage, setErrorMessage] = useState("")
 
+  const {FaucetMinting} = useWriteFaucetMinting()
+  const {isConnected, address} = useAccount()
+  const userHasMinted = useReadUserHasMinted(address)
   const handleClaim = async () => {
     if (!isConnected) return
-
+    if(userHasMinted){
+      setShowError(true)
+      setErrorMessage("You have minted the token!")
+      setTimeout(() => {
+      setShowError(false)
+    }, 5000)
+      return
+    }
+    setIsLoading(true)
     try {
       const tx = await FaucetMinting()
       setShowSuccess(true)
-    } catch(err) {
-      console.log(err)
-      setShowError(true)
-    }
-    setIsLoading(false)
+    } catch (err:any) {
+      console.error('TX Error:', err)
+      setErrorMessage(err?.cause?.cause?.shortMessage)
 
+      setShowError(true)
+    } finally {
+      setIsLoading(false)
+    }
+  
     // Hide success message after 5 seconds
     setTimeout(() => {
       setShowSuccess(false) 
@@ -90,7 +102,7 @@ export default function FaucetPage() {
                         <Alert className="border-red-200 bg-red-50">
                           <CircleX className="h-4 w-4 text-red-600" />
                           <AlertDescription className="text-red-700">
-                            Klaim gagal!
+                            {errorMessage}
                           </AlertDescription>
                         </Alert>
                       )}
