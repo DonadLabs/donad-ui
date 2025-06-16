@@ -144,7 +144,6 @@ export default function DonatePage() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <NavBar />
-
       <main className="flex-1">
         {/* Breadcrumb */}
         <section className="w-full py-4 bg-white border-b">

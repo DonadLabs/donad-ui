@@ -10,7 +10,6 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
       <NavBar />
-
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
@@ -25,14 +24,14 @@ export default function LandingPage() {
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">  Transparansi Fundraising dengan Blockchain
                 </h1>
 
-                <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-3xl mx-auto">
+                {/* <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-3xl mx-auto">
                   <p className="text-lg text-red-700 font-medium">
                     💔 <strong>Masalah Saat Ini:</strong>
                   </p>
                   <p className="text-red-600 mt-2">
                     &ldquo;Transaksi dari fundraiser tidak terintegrasi sehingga menyulitkan transparansi.&rdquo;
                   </p>
-                </div>
+                </div> */}
 
                 <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                   Solusi fundraising berbasis blockchain yang memberikan transparansi penuh, sistem reputasi yang adil,
@@ -172,7 +171,7 @@ export default function LandingPage() {
                 <Badge variant="outline" className="px-4 py-2 text-purple-600 border-purple-200">
                   Keunggulan Platform
                 </Badge>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Mengapa Memilih FundChain?</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Mengapa Memilih Donad?</h2>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -235,7 +234,7 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-purple-600 to-purple-800">
+        {/* <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-600 to-teal-600">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
@@ -261,9 +260,8 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
-
       <Footer />
     </div>
   )

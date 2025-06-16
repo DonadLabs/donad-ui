@@ -99,9 +99,9 @@ const campaigns = [
 const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000];
 
 function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("id-ID", {
+  return new Intl.NumberFormat("de-DE", {
     style: "currency",
-    currency: "IDR",
+    currency: "DON",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
@@ -190,10 +190,10 @@ export default function DonatePage() {
                         {campaign.title}
                       </CardTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
+                        {/* <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
                           {campaign.location}
-                        </div>
+                        </div> */}
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           Dibuat{" "}
@@ -478,7 +478,7 @@ export default function DonatePage() {
                   </div>
 
                   {/* Donor Information */}
-                  <div className="space-y-3">
+                  {/* <div className="space-y-3">
                     <Label htmlFor="donor-name">Nama Donatur</Label>
                     <Input
                       id="donor-name"
@@ -498,10 +498,10 @@ export default function DonatePage() {
                         Donasi sebagai anonim
                       </Label>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Message */}
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="message">Pesan Dukungan (Opsional)</Label>
                     <Textarea
                       id="message"
@@ -510,10 +510,10 @@ export default function DonatePage() {
                       onChange={(e) => setDonorMessage(e.target.value)}
                       className="min-h-[80px]"
                     />
-                  </div>
+                  </div> */}
 
                   {/* Payment Method */}
-                  <div className="space-y-3">
+                  {/* <div className="space-y-3">
                     <Label>Metode Pembayaran</Label>
                     <div className="space-y-2">
                       <Button
@@ -547,23 +547,21 @@ export default function DonatePage() {
                         E-Wallet
                       </Button>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Total */}
                   {finalAmount > 0 && (
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
                       <div className="flex justify-between items-center">
                         <span className="font-medium">Total Donasi:</span>
-                        <span className="text-xl font-bold text-blue-600">
-                          {formatCurrency(finalAmount)}
-                        </span>
+                        <span className="text-xl font-bold text-purple-600">{formatCurrency(finalAmount)}</span>
                       </div>
                     </div>
                   )}
 
                   {/* Donate Button */}
                   <Button
-                    className="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 h-12 text-lg"
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-blue-700 hover:to-teal-700 h-12 text-lg"
                     disabled={!finalAmount || !paymentMethod}
                   >
                     <Heart className="w-5 h-5 mr-2" />
