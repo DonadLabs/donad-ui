@@ -35,6 +35,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { NavBar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { useReadGetFundraisingDetail } from "@/hooks/readContract";
 
 // Mock data for campaigns (same as explore page)
 const campaigns = [
@@ -107,11 +108,20 @@ function formatCurrency(amount: number) {
   }).format(amount);
 }
 
+function formatAddress(address: string) {
+  if (!address) return ''
+  return `${address.slice(0, 6)}...${address.slice(-5)}`
+}
+
+
 export default function DonatePage() {
   const params = useParams();
   const campaignId = Number.parseInt(params.id as string);
   const campaign = campaigns.find((c) => c.id === campaignId);
-
+  const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
+  const now = Math.floor(Date.now() / 1000)
+  const daysLeft = Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24))
+  
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
   const [donorName, setDonorName] = useState("");
@@ -137,7 +147,7 @@ export default function DonatePage() {
   }
 
   const progressPercentage = Math.round(
-    (campaign.raised / campaign.target) * 100
+    (Number(fundraiseDetail?.accumulatedAmount) / Number(fundraiseDetail?.targetAmount)) * 100
   );
   const finalAmount = selectedAmount || Number.parseInt(customAmount) || 0;
 
@@ -168,39 +178,39 @@ export default function DonatePage() {
               {/* Campaign Header */}
               <Card>
                 <div className="aspect-video bg-gray-100 relative">
-                  <img
+                  {/* <img
                     src={campaign.image || "/placeholder.svg"}
                     alt={campaign.title}
                     className="w-full h-full object-cover rounded-t-lg"
-                  />
-                  <Badge className="absolute top-4 left-4 bg-white text-gray-700">
+                  /> */}
+                  {/* <Badge className="absolute top-4 left-4 bg-white text-gray-700">
                     {campaign.category}
-                  </Badge>
-                  {campaign.verified && (
+                  </Badge> */}
+                  {/* {campaign.verified && (
                     <Badge className="absolute top-4 right-4 bg-green-500 text-white">
                       <Shield className="w-3 h-3 mr-1" />
                       Terverifikasi
                     </Badge>
-                  )}
+                  )} */}
                 </div>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
                       <CardTitle className="text-2xl">
-                        {campaign.title}
+                        {fundraiseDetail?.title}
                       </CardTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         {/* <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
                           {campaign.location}
                         </div> */}
-                        <div className="flex items-center gap-1">
+                        {/* <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           Dibuat{" "}
                           {new Date(campaign.createdAt).toLocaleDateString(
                             "id-ID"
                           )}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -232,16 +242,16 @@ export default function DonatePage() {
                     <Progress value={progressPercentage} className="h-3" />
                     <div className="flex justify-between text-sm text-muted-foreground">
                       <span className="font-semibold text-lg text-blue-600">
-                        {formatCurrency(campaign.raised)}
+                        {formatCurrency(Number(fundraiseDetail?.accumulatedAmount))}
                       </span>
-                      <span>dari {formatCurrency(campaign.target)}</span>
+                      <span>dari {formatCurrency(Number(fundraiseDetail?.targetAmount))}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 pt-4 border-t">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-blue-600">
-                        {campaign.donors}
+                        {Number(fundraiseDetail?.donorsCount)}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Donatur
@@ -249,7 +259,7 @@ export default function DonatePage() {
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-teal-600">
-                        {campaign.daysLeft}
+                        {daysLeft}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Hari Tersisa
@@ -257,7 +267,7 @@ export default function DonatePage() {
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-purple-600">
-                        {formatCurrency(campaign.target - campaign.raised)}
+                        {formatCurrency(Number(fundraiseDetail?.targetAmount) - Number(fundraiseDetail?.accumulatedAmount))}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Dibutuhkan
@@ -272,7 +282,7 @@ export default function DonatePage() {
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="story">Cerita</TabsTrigger>
                   <TabsTrigger value="updates">Update</TabsTrigger>
-                  <TabsTrigger value="milestones">Milestone</TabsTrigger>
+                  {/* <TabsTrigger value="milestones">Milestone</TabsTrigger> */}
                   <TabsTrigger value="donors">Donatur</TabsTrigger>
                 </TabsList>
 
@@ -284,18 +294,15 @@ export default function DonatePage() {
                     <CardContent>
                       <div className="prose max-w-none">
                         <p className="text-muted-foreground mb-4">
-                          {campaign.description}
+                          {fundraiseDetail?.description}
                         </p>
-                        <div className="whitespace-pre-line text-sm">
-                          {campaign.fullDescription}
-                        </div>
                       </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
                 <TabsContent value="updates" className="space-y-4">
-                  {campaign.updates.map((update, index) => (
+                  {/* {campaign.updates.map((update, index) => (
                     <Card key={index}>
                       <CardHeader>
                         <div className="flex items-center justify-between">
@@ -313,7 +320,7 @@ export default function DonatePage() {
                         </p>
                       </CardContent>
                     </Card>
-                  ))}
+                  ))} */}
                 </TabsContent>
 
                 <TabsContent value="milestones" className="space-y-4">
@@ -407,15 +414,13 @@ export default function DonatePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-3">
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage src="/placeholder.svg?height=48&width=48" />
-                      <AvatarFallback>YPA</AvatarFallback>
-                    </Avatar>
+                    {/* <Avatar className="w-12 h-12">
+                    </Avatar> */}
                     <div className="flex-1">
-                      <div className="font-medium">{campaign.fundraiser}</div>
+                      <div className="font-medium">{formatAddress(fundraiseDetail.fundraiser)}</div>
                       <div className="text-sm text-muted-foreground flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" />
-                        Rating {campaign.reputation}/5.0
+                        {/* <TrendingUp className="w-3 h-3" /> */}
+                        {/* Rating {campaign.reputation}/5.0 */}
                       </div>
                     </div>
                     {campaign.verified && (

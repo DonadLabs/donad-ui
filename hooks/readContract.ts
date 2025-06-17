@@ -1,7 +1,22 @@
 import { useReadContract } from "wagmi";
 import {
-    donContract,
+    donContract,donadManagerContract
 } from "../contracts/contracts";
+
+type Campaign = {
+  id: BigInt
+  title: string
+  description: string
+  location: string
+  category: string
+  verified: boolean
+  fundraiser: string
+  accumulatedAmount: BigInt // or bigint if from contract
+  targetAmount: BigInt
+  targetDate: BigInt
+  totalWithdrawAmount: BigInt
+  donorsCount: BigInt
+}
 
 export const useReadDecimals = () => {
   const { data: decimals } = useReadContract({
@@ -22,4 +37,25 @@ export const useReadUserHasMinted = (address:`0x${string}` | undefined) => {
     });
 
   return userHasMinted;
+};
+
+export const useReadGetFundraisings = () :Campaign[] => {
+  const { data: fundraisings } = useReadContract({
+      address: donadManagerContract.address, 
+      abi: donadManagerContract.abi,
+      functionName: "getFundraisings",
+    }) as {data: Campaign[]};
+
+  return fundraisings ?? [];
+};
+
+export const useReadGetFundraisingDetail = (id: number) :Campaign => {
+  const { data: fundraiseDetails } = useReadContract({
+      address: donadManagerContract.address, 
+      abi: donadManagerContract.abi,
+      functionName: "getFundraiseDetails",
+      args:[id]
+    }) as {data: Campaign};
+
+  return fundraiseDetails;
 };

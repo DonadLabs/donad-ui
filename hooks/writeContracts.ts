@@ -1,5 +1,6 @@
 import { BaseError, useWriteContract} from "wagmi";
 import {
+    donadManagerContract,
     donContract,
 } from "../contracts/contracts";
 
@@ -16,4 +17,17 @@ export const useWriteFaucetMinting = () => {
         });
     }
     return {hash, FaucetMinting, error};
+};
+
+export const useWriteCreateFundraising = () => {
+    const { data: hash, error, writeContractAsync } = useWriteContract();
+    const CreateFundraising = (title:string, description:string, amount:number, deadline:number) => {
+        return writeContractAsync({
+            address: donadManagerContract.address, // ERC20 token address
+            abi: donadManagerContract.abi,
+            functionName: "createFundraising",
+            args: [title, description, amount, deadline]
+        });
+    }
+    return {hash, CreateFundraising, error};
 };
