@@ -129,7 +129,7 @@ export default function DonatePage() {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
 
-  if (!campaign) {
+  if (!fundraiseDetail) {
     return (
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="flex-1 flex items-center justify-center">
@@ -333,7 +333,7 @@ export default function DonatePage() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      {campaign.milestones.map((milestone, index) => (
+                      {/* {campaign.milestones.map((milestone, index) => (
                         <div
                           key={index}
                           className="flex items-center gap-4 p-4 border rounded-lg"
@@ -362,7 +362,7 @@ export default function DonatePage() {
                             </div>
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -417,18 +417,25 @@ export default function DonatePage() {
                     {/* <Avatar className="w-12 h-12">
                     </Avatar> */}
                     <div className="flex-1">
-                      <div className="font-medium">{formatAddress(fundraiseDetail.fundraiser)}</div>
+                      <a
+                        href={`https://testnet.monadexplorer.com/address/${fundraiseDetail?.fundraiser}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {formatAddress(fundraiseDetail.fundraiser)}
+                      </a>
+                      {/* <div className="font-medium">{formatAddress(fundraiseDetail.fundraiser)}</div> */}
                       <div className="text-sm text-muted-foreground flex items-center gap-1">
                         {/* <TrendingUp className="w-3 h-3" /> */}
                         {/* Rating {campaign.reputation}/5.0 */}
                       </div>
                     </div>
-                    {campaign.verified && (
+                    {/* {campaign.verified && (
                       <Badge className="bg-green-500 text-white">
                         <Shield className="w-3 h-3 mr-1" />
                         Verified
                       </Badge>
-                    )}
+                    )} */}
                   </div>
                 </CardContent>
               </Card>
