@@ -9,25 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Shield,
-  TrendingUp,
   Heart,
-  MapPin,
   Share2,
   Flag,
-  Wallet,
-  CreditCard,
-  Smartphone,
   ArrowLeft,
   CheckCircle,
-  Calendar,
 } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
@@ -36,66 +28,6 @@ import { useParams } from "next/navigation";
 import { NavBar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useReadGetFundraisingDetail } from "@/hooks/readContract";
-
-// Mock data for campaigns (same as explore page)
-const campaigns = [
-  {
-    id: 1,
-    title: "Bantuan Pendidikan Anak Yatim",
-    description:
-      "Membantu biaya pendidikan untuk 50 anak yatim di Jakarta Timur. Program ini bertujuan untuk memberikan akses pendidikan yang layak bagi anak-anak yatim yang kurang mampu. Dana yang terkumpul akan digunakan untuk biaya sekolah, seragam, buku, dan kebutuhan pendidikan lainnya.",
-    fullDescription:
-      "Yayasan Peduli Anak telah berkomitmen untuk membantu pendidikan anak-anak yatim di Jakarta Timur selama lebih dari 10 tahun. Saat ini, kami membutuhkan bantuan untuk mendukung 50 anak yatim yang sedang menempuh pendidikan dari tingkat SD hingga SMA.\n\nDana yang terkumpul akan dialokasikan untuk:\n- Biaya SPP dan uang sekolah (40%)\n- Seragam dan perlengkapan sekolah (25%)\n- Buku dan alat tulis (20%)\n- Biaya transportasi (10%)\n- Biaya operasional program (5%)\n\nSetiap anak yang mendapat bantuan akan dipantau perkembangan pendidikannya dan akan mendapat laporan berkala kepada para donatur.",
-    category: "Pendidikan",
-    location: "Jakarta",
-    raised: 45000000,
-    target: 100000000,
-    donors: 234,
-    daysLeft: 15,
-    image: "/placeholder.svg?height=400&width=600",
-    fundraiser: "Yayasan Peduli Anak",
-    reputation: 4.8,
-    verified: true,
-    createdAt: "2024-01-15",
-    updates: [
-      {
-        date: "2024-01-20",
-        title: "Update Progress Minggu Pertama",
-        content:
-          "Terima kasih untuk semua donatur yang telah berpartisipasi. Kami telah mencapai 45% dari target!",
-      },
-      {
-        date: "2024-01-18",
-        title: "Dokumentasi Kunjungan Lapangan",
-        content:
-          "Tim kami telah mengunjungi sekolah-sekolah dan bertemu dengan anak-anak yang akan dibantu.",
-      },
-    ],
-    milestones: [
-      {
-        percentage: 25,
-        description: "Pembelian seragam dan perlengkapan sekolah",
-        completed: true,
-      },
-      {
-        percentage: 50,
-        description: "Pembayaran biaya SPP semester pertama",
-        completed: false,
-      },
-      {
-        percentage: 75,
-        description: "Pembelian buku dan alat tulis",
-        completed: false,
-      },
-      {
-        percentage: 100,
-        description: "Biaya transportasi dan operasional",
-        completed: false,
-      },
-    ],
-  },
-  // Add other campaigns here...
-];
 
 const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000];
 
@@ -117,17 +49,13 @@ function formatAddress(address: string) {
 export default function DonatePage() {
   const params = useParams();
   const campaignId = Number.parseInt(params.id as string);
-  const campaign = campaigns.find((c) => c.id === campaignId);
   const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
   const now = Math.floor(Date.now() / 1000)
   const daysLeft = Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24))
   
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
-  const [donorName, setDonorName] = useState("");
-  const [donorMessage, setDonorMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [isAnonymous, setIsAnonymous] = useState(false);
 
   if (!fundraiseDetail) {
     return (
@@ -178,20 +106,6 @@ export default function DonatePage() {
               {/* Campaign Header */}
               <Card>
                 <div className="aspect-video bg-gray-100 relative">
-                  {/* <img
-                    src={campaign.image || "/placeholder.svg"}
-                    alt={campaign.title}
-                    className="w-full h-full object-cover rounded-t-lg"
-                  /> */}
-                  {/* <Badge className="absolute top-4 left-4 bg-white text-gray-700">
-                    {campaign.category}
-                  </Badge> */}
-                  {/* {campaign.verified && (
-                    <Badge className="absolute top-4 right-4 bg-green-500 text-white">
-                      <Shield className="w-3 h-3 mr-1" />
-                      Terverifikasi
-                    </Badge>
-                  )} */}
                 </div>
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -200,17 +114,6 @@ export default function DonatePage() {
                         {fundraiseDetail?.title}
                       </CardTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        {/* <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          {campaign.location}
-                        </div> */}
-                        {/* <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          Dibuat{" "}
-                          {new Date(campaign.createdAt).toLocaleDateString(
-                            "id-ID"
-                          )}
-                        </div> */}
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -279,10 +182,9 @@ export default function DonatePage() {
 
               {/* Tabs Content */}
               <Tabs defaultValue="story" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="story">Cerita</TabsTrigger>
                   <TabsTrigger value="updates">Update</TabsTrigger>
-                  {/* <TabsTrigger value="milestones">Milestone</TabsTrigger> */}
                   <TabsTrigger value="donors">Donatur</TabsTrigger>
                 </TabsList>
 
@@ -414,8 +316,6 @@ export default function DonatePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-3">
-                    {/* <Avatar className="w-12 h-12">
-                    </Avatar> */}
                     <div className="flex-1">
                       <a
                         href={`https://testnet.monadexplorer.com/address/${fundraiseDetail?.fundraiser}`}
@@ -424,18 +324,9 @@ export default function DonatePage() {
                       >
                         {formatAddress(fundraiseDetail.fundraiser)}
                       </a>
-                      {/* <div className="font-medium">{formatAddress(fundraiseDetail.fundraiser)}</div> */}
                       <div className="text-sm text-muted-foreground flex items-center gap-1">
-                        {/* <TrendingUp className="w-3 h-3" /> */}
-                        {/* Rating {campaign.reputation}/5.0 */}
                       </div>
                     </div>
-                    {/* {campaign.verified && (
-                      <Badge className="bg-green-500 text-white">
-                        <Shield className="w-3 h-3 mr-1" />
-                        Verified
-                      </Badge>
-                    )} */}
                   </div>
                 </CardContent>
               </Card>
@@ -488,78 +379,6 @@ export default function DonatePage() {
                       />
                     </div>
                   </div>
-
-                  {/* Donor Information */}
-                  {/* <div className="space-y-3">
-                    <Label htmlFor="donor-name">Nama Donatur</Label>
-                    <Input
-                      id="donor-name"
-                      placeholder="Masukkan nama Anda"
-                      value={donorName}
-                      onChange={(e) => setDonorName(e.target.value)}
-                    />
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="anonymous"
-                        checked={isAnonymous}
-                        onChange={(e) => setIsAnonymous(e.target.checked)}
-                        className="rounded"
-                      />
-                      <Label htmlFor="anonymous" className="text-sm">
-                        Donasi sebagai anonim
-                      </Label>
-                    </div>
-                  </div> */}
-
-                  {/* Message */}
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="message">Pesan Dukungan (Opsional)</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="Tulis pesan dukungan Anda..."
-                      value={donorMessage}
-                      onChange={(e) => setDonorMessage(e.target.value)}
-                      className="min-h-[80px]"
-                    />
-                  </div> */}
-
-                  {/* Payment Method */}
-                  {/* <div className="space-y-3">
-                    <Label>Metode Pembayaran</Label>
-                    <div className="space-y-2">
-                      <Button
-                        variant={
-                          paymentMethod === "wallet" ? "default" : "outline"
-                        }
-                        className="w-full justify-start"
-                        onClick={() => setPaymentMethod("wallet")}
-                      >
-                        <Wallet className="w-4 h-4 mr-2" />
-                        Crypto Wallet
-                      </Button>
-                      <Button
-                        variant={
-                          paymentMethod === "bank" ? "default" : "outline"
-                        }
-                        className="w-full justify-start"
-                        onClick={() => setPaymentMethod("bank")}
-                      >
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        Transfer Bank
-                      </Button>
-                      <Button
-                        variant={
-                          paymentMethod === "ewallet" ? "default" : "outline"
-                        }
-                        className="w-full justify-start"
-                        onClick={() => setPaymentMethod("ewallet")}
-                      >
-                        <Smartphone className="w-4 h-4 mr-2" />
-                        E-Wallet
-                      </Button>
-                    </div>
-                  </div> */}
 
                   {/* Total */}
                   {finalAmount > 0 && (
