@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 
 export function Footer() {
   return (
@@ -26,7 +25,6 @@ export function Footer() {
         >
           Kontak
         </Link>
-        <ConnectButton />
       </nav>
     </footer>
   )
