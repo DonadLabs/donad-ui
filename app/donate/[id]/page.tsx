@@ -39,22 +39,9 @@ import {
 } from "@/hooks/readContract";
 import { useWriteApproveToken, useWriteDonate } from "@/hooks/writeContracts";
 import { useToast } from "@/components/ui/toast";
+import { formatAddress, formatCurrency, timeAgo } from "@/app/utils";
 
 const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000];
-
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "DON",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
-function formatAddress(address: string) {
-  if (!address) return "";
-  return `${address.slice(0, 6)}...${address.slice(-5)}`;
-}
 
 export default function DonatePage() {
   const params = useParams();
@@ -62,14 +49,14 @@ export default function DonatePage() {
   const campaignId = Number.parseInt(params.id as string);
   const { addToast } = useToast();
 
-  // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
-  const fundraiseDetail = useReadGetFundraisingDetail(campaignId);
   const userBalance = useReadTokenBalance(address);
   const userAllowance = useReadTokenAllowance(address);
-  const donationHistories = useReadDonationHistories(campaignId);
-
   const { ApproveToken } = useWriteApproveToken();
   const { Donate } = useWriteDonate();
+  const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
+  const donationHistories = useReadGetDonationHistories(campaignId)
+  const now = Math.floor(Date.now() / 1000)
+  const daysLeft = Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24))
 
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
@@ -409,53 +396,34 @@ export default function DonatePage() {
                       <CardTitle>Donatur Terbaru</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      {donationHistories &&
-                      Array.isArray(donationHistories) &&
-                      donationHistories.length > 0 ? (
-                        donationHistories
-                          .slice(0, 5)
-                          .map(
-                            (
-                              donation: {
-                                donor: string;
-                                timestamp: bigint;
-                                amount: bigint;
-                              },
-                              index: number
-                            ) => (
-                              <div
-                                key={index}
-                                className="flex items-center gap-4 p-4 border rounded-lg"
+                      {donationHistories.map((el, idx) =>
+                        <div key={idx} className="flex items-center gap-4 p-4 border rounded-lg">
+                          <Avatar>
+                            <AvatarImage
+                              src={`/placeholder.svg?height=40&width=40`}
+                            />
+                            <AvatarFallback>D{idx + 1}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="font-medium">
+                              <a
+                                href={`https://testnet.monadexplorer.com/address/${fundraiseDetail?.fundraiser}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
                               >
-                                <Avatar>
-                                  <AvatarFallback>
-                                    {formatAddress(donation.donor)
-                                      .slice(0, 2)
-                                      .toUpperCase()}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div className="flex-1">
-                                  <div className="font-medium">
-                                    {formatAddress(donation.donor)}
-                                  </div>
-                                  <div className="text-sm text-muted-foreground">
-                                    {new Date(
-                                      Number(donation.timestamp) * 1000
-                                    ).toLocaleDateString("id-ID")}
-                                  </div>
-                                </div>
-                                <div className="text-right">
-                                  <div className="font-semibold text-blue-600">
-                                    {formatCurrency(Number(donation.amount))}
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          )
-                      ) : (
-                        <p className="text-muted-foreground">
-                          Belum ada donatur untuk kampanye ini.
-                        </p>
+                                {formatAddress(el.donor)}
+                              </a>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {timeAgo(Number(el.timestamp))}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold text-blue-600">
+                              {Number(el.amount)} DON
+                            </div>
+                          </div>
+                        </div>
                       )}
                     </CardContent>
                   </Card>
@@ -711,8 +679,8 @@ export default function DonatePage() {
             </div>
           </div>
         </div>
-      </main>
+      </main >
       <Footer />
-    </div>
+    </div >
   );
 }

@@ -18,6 +18,13 @@ type Campaign = {
   donorsCount: bigint
 }
 
+type DonationHistory = {
+  fundraiseId: BigInt
+  donor: string
+  amount: BigInt
+  timestamp: BigInt
+}
+
 export const useReadDecimals = () => {
   const { data: decimals } = useReadContract({
       address: donContract.address,
@@ -84,18 +91,6 @@ export const useReadGetFundraisingDetail = (id: number) :Campaign => {
   return fundraiseDetails;
 };
 
-// NEW: Read donation histories for a fundraising campaign
-export const useReadDonationHistories = (fundraiseId: number) => {
-  const { data: donationHistories } = useReadContract({
-      address: donadManagerContract.address,
-      abi: donadManagerContract.abi,
-      functionName: "getDonationHistories",
-      args: [fundraiseId]
-    });
-
-  return donationHistories;
-};
-
 // NEW: Read user's total donation amount
 export const useReadUserTotalDonation = (address: `0x${string}` | undefined) => {
   const { data: totalDonation } = useReadContract({
@@ -106,4 +101,14 @@ export const useReadUserTotalDonation = (address: `0x${string}` | undefined) => 
     });
 
   return totalDonation as bigint | undefined;
+
+export const useReadGetDonationHistories = (id: number) :DonationHistory[] => {
+  const { data: donationHistories } = useReadContract({
+      address: donadManagerContract.address, 
+      abi: donadManagerContract.abi,
+      functionName: "getDonationHistories",
+      args:[id]
+    }) as {data: DonationHistory[]};
+
+  return donationHistories;
 };
