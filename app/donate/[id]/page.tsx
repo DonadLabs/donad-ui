@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Shield,
@@ -30,18 +30,19 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { NavBar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { useAccount } from "wagmi";
 import {
   useReadGetFundraisingDetail,
   useReadTokenBalance,
   useReadTokenAllowance,
-  useReadDonationHistories,
+  useReadGetWithdrawals,
+  useReadGetDonationHistories,
 } from "@/hooks/readContract";
 import { useWriteApproveToken, useWriteDonate } from "@/hooks/writeContracts";
 import { useToast } from "@/components/ui/toast";
 import { formatAddress, formatCurrency, timeAgo } from "@/app/utils";
+import { useAccount } from "wagmi";
 
-const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000];
+const donationAmounts = [5, 10, 25, 50, 100, 250];
 
 export default function DonatePage() {
   const params = useParams();
@@ -55,8 +56,10 @@ export default function DonatePage() {
   const { Donate } = useWriteDonate();
   const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
   const donationHistories = useReadGetDonationHistories(campaignId)
-  const now = Math.floor(Date.now() / 1000)
-  const daysLeft = Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24))
+  const withdrawal = useReadGetWithdrawals(campaignId)
+  const isFundraiser = address === fundraiseDetail?.fundraiser
+  console.log({ fundraiseDetail })
+  const amountLeft = Number(fundraiseDetail?.targetAmount) / 1e6 - Number(fundraiseDetail?.accumulatedAmount) / 1e6
 
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
@@ -79,19 +82,17 @@ export default function DonatePage() {
 
   // Calculations
   const now = Math.floor(Date.now() / 1000);
-  const daysLeft = fundraiseDetail?.targetDate
-    ? Math.ceil((Number(fundraiseDetail.targetDate) - now) / (60 * 60 * 24))
-    : 0;
+  const daysLeft = (Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24)) > 0 ? Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24)) : 0)
   const isActive = daysLeft > 0;
   const progressPercentage = fundraiseDetail
     ? Math.round(
-        (Number(fundraiseDetail.accumulatedAmount) /
-          Number(fundraiseDetail.targetAmount)) *
-          100
-      )
+      (Number(fundraiseDetail.accumulatedAmount) /
+        Number(fundraiseDetail.targetAmount)) *
+      100
+    )
     : 0;
   const finalAmount = selectedAmount || Number.parseInt(customAmount) || 0;
-  const finalAmountBigInt = BigInt(finalAmount);
+  const finalAmountBigInt = BigInt(finalAmount * 1e6);
   const needsApproval =
     finalAmount > 0 &&
     (userAllowance ? userAllowance < finalAmountBigInt : true);
@@ -313,16 +314,11 @@ export default function DonatePage() {
                     <Progress value={progressPercentage} className="h-3" />
                     <div className="flex justify-between text-sm text-muted-foreground">
                       <span className="font-semibold text-lg text-blue-600">
-                        {formatCurrency(
-                          Number(fundraiseDetail?.accumulatedAmount)
-                        )}
+                        {formatCurrency(Number(fundraiseDetail?.accumulatedAmount) / 1e6)}
                       </span>
-                      <span>
-                        dari{" "}
-                        {formatCurrency(Number(fundraiseDetail?.targetAmount))}
-                      </span>
-                    </div>
-                  </div>
+                      <span>dari {formatCurrency(Number(fundraiseDetail?.targetAmount) / 1e6)}</span>
+                    </div >
+                  </div >
                   <div className="grid grid-cols-3 gap-4 pt-4 border-t">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-blue-600">
@@ -341,22 +337,26 @@ export default function DonatePage() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-[#6B46C1]">
-                        {formatCurrency(
-                          Math.max(
-                            0,
-                            Number(fundraiseDetail?.targetAmount) -
-                              Number(fundraiseDetail?.accumulatedAmount)
-                          )
-                        )}
+                      {/* <<<<<<< Updated upstream
+  <div className="text-2xl font-bold text-[#6B46C1]">
+    {formatCurrency(
+      Math.max(
+        0,
+        Number(fundraiseDetail?.targetAmount) -
+        Number(fundraiseDetail?.accumulatedAmount)
+      )
+    )} */}
+                      <div className="text-2xl font-bold text-purple-600">
+                        {amountLeft > 0 ? formatCurrency(amountLeft) : 0}
+                        {/* >>>>>>> Stashed changes */}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Dibutuhkan
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </div >
+                </CardContent >
+              </Card >
 
               <Tabs defaultValue="story" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
@@ -396,7 +396,7 @@ export default function DonatePage() {
                       <CardTitle>Donatur Terbaru</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      {donationHistories.map((el, idx) =>
+                      {donationHistories.length > 0 ? donationHistories.map((el, idx) =>
                         <div key={idx} className="flex items-center gap-4 p-4 border rounded-lg">
                           <Avatar>
                             <AvatarImage
@@ -420,16 +420,19 @@ export default function DonatePage() {
                           </div>
                           <div className="text-right">
                             <div className="font-semibold text-blue-600">
-                              {Number(el.amount)} DON
+                              {formatCurrency(Number(el.amount) / 1e6)}
                             </div>
                           </div>
                         </div>
-                      )}
+                      ) : <p className="text-muted-foreground">
+                        Belum ada update untuk kampanye ini.
+                      </p>
+                      }
                     </CardContent>
                   </Card>
                 </TabsContent>
               </Tabs>
-            </div>
+            </div >
 
             <div className="space-y-6">
               <Card>
@@ -462,15 +465,15 @@ export default function DonatePage() {
                   <CardContent>
                     <div className="text-2xl font-bold text-blue-600">
                       {userBalance
-                        ? formatCurrency(Number(userBalance))
+                        ? formatCurrency(Number(userBalance) / 1e6)
                         : "0 DON"}
                     </div>
-                    <div className="text-sm text-blue-600 mt-2">
+                    {/* <div className="text-sm text-blue-600 mt-2">
                       Allowance:{" "}
                       {userAllowance
                         ? formatCurrency(Number(userAllowance))
                         : "0 DON"}
-                    </div>
+                    </div> */}
                   </CardContent>
                 </Card>
               )}
@@ -562,20 +565,18 @@ export default function DonatePage() {
                     isConnected &&
                     userBalance !== undefined && (
                       <div
-                        className={`p-4 rounded-lg border ${
-                          hasSufficientBalance
-                            ? "bg-green-50 border-green-200"
-                            : "bg-red-50 border-red-200"
-                        }`}
+                        className={`p-4 rounded-lg border ${hasSufficientBalance
+                          ? "bg-green-50 border-green-200"
+                          : "bg-red-50 border-red-200"
+                          }`}
                       >
                         <div className="flex justify-between items-center">
                           <span className="font-medium">Saldo mencukupi:</span>
                           <span
-                            className={`text-lg font-bold ${
-                              hasSufficientBalance
-                                ? "text-green-600"
-                                : "text-red-600"
-                            }`}
+                            className={`text-lg font-bold ${hasSufficientBalance
+                              ? "text-green-600"
+                              : "text-red-600"
+                              }`}
                           >
                             {hasSufficientBalance ? "✓" : "✗"}
                           </span>
@@ -588,7 +589,8 @@ export default function DonatePage() {
                           </p>
                         )}
                       </div>
-                    )}
+                    )
+                  }
 
                   {finalAmount > 0 && (
                     <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
@@ -600,8 +602,8 @@ export default function DonatePage() {
                       </div>
                     </div>
                   )}
-
-                  {isConnected &&
+                  {
+                    isConnected &&
                     isActive &&
                     finalAmount > 0 &&
                     hasSufficientBalance && (
@@ -645,14 +647,15 @@ export default function DonatePage() {
                           </Button>
                         )}
                       </div>
-                    )}
+                    )
+                  }
 
                   <p className="text-xs text-center text-muted-foreground">
                     Dengan berdonasi, Anda menyetujui syarat dan ketentuan
                     platform
                   </p>
-                </CardContent>
-              </Card>
+                </CardContent >
+              </Card >
 
               <Card className="border-green-200 bg-green-50">
                 <CardHeader>
@@ -676,9 +679,9 @@ export default function DonatePage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-        </div>
+            </div >
+          </div >
+        </div >
       </main >
       <Footer />
     </div >
