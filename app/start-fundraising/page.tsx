@@ -1,32 +1,50 @@
-'use client'
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Upload, Target, FileText, CheckCircle, AlertCircle } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
-import { NavBar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { useState } from "react"
-import { useWriteCreateFundraising } from "@/hooks/writeContracts"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Upload,
+  Target,
+  FileText,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { NavBar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { useState } from "react";
+import { useWriteCreateFundraising } from "@/hooks/writeContracts";
 
 export default function StartFundraisingPage() {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [target, setTarget] = useState(0)
-  const [deadline, setDeadline] = useState("")
-  const {CreateFundraising} = useWriteCreateFundraising()
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [target, setTarget] = useState(0);
+  const [deadline, setDeadline] = useState("");
+  const { CreateFundraising } = useWriteCreateFundraising();
 
   const handleTargetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value)
-    setTarget(value)
-  }
+    const value = Number(e.target.value);
+    setTarget(value);
+  };
 
-  function HandleSubmit(){
-    const dateInSeconds = Math.floor(new Date(deadline).getTime() / 1000)
+  function HandleSubmit() {
+    const dateInSeconds = Math.floor(new Date(deadline).getTime() / 1000);
     CreateFundraising(title, description, target, dateInSeconds);
   }
 
@@ -36,15 +54,15 @@ export default function StartFundraisingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-16 bg-gradient-to-r from-purple-600 to-purple-800">
+        <section className="w-full py-12 md:py-16 bg-gradient-to-r from-[#6B46C1] to-purple-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
                 Mulai Kampanye Fundraising
               </h1>
               <p className="max-w-2xl text-purple-100 md:text-xl">
-                Buat kampanye fundraising yang transparan dengan teknologi blockchain. Dana Anda akan aman dan dapat
-                dilacak.
+                Buat kampanye fundraising yang transparan dengan teknologi
+                blockchain. Dana Anda akan aman dan dapat dilacak.
               </p>
             </div>
           </div>
@@ -54,7 +72,9 @@ export default function StartFundraisingPage() {
         <section className="w-full py-8 bg-white border-b">
           <div className="container px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6 text-center">Persyaratan Fundraiser</h2>
+              <h2 className="text-2xl font-bold mb-6 text-center">
+                Persyaratan Fundraiser
+              </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <Card className="border-green-200 bg-green-50">
                   <CardHeader>
@@ -70,7 +90,9 @@ export default function StartFundraisingPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
-                      <span className="text-sm">Total donasi: Rp 5.000.000</span>
+                      <span className="text-sm">
+                        Total donasi: Rp 5.000.000
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -107,8 +129,12 @@ export default function StartFundraisingPage() {
                 <div className="lg:col-span-2">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-2xl">Buat Kampanye Baru</CardTitle>
-                      <CardDescription>Isi informasi lengkap tentang kampanye fundraising Anda</CardDescription>
+                      <CardTitle className="text-2xl">
+                        Buat Kampanye Baru
+                      </CardTitle>
+                      <CardDescription>
+                        Isi informasi lengkap tentang kampanye fundraising Anda
+                      </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {/* Basic Information */}
@@ -120,17 +146,29 @@ export default function StartFundraisingPage() {
 
                         <div className="space-y-2">
                           <Label htmlFor="title">Judul Kampanye *</Label>
-                          <Input id="title" placeholder="Masukkan judul kampanye yang menarik" value={title} onChange={(e)=>{setTitle(e.target.value)}} className="w-full" />
+                          <Input
+                            id="title"
+                            placeholder="Masukkan judul kampanye yang menarik"
+                            value={title}
+                            onChange={(e) => {
+                              setTitle(e.target.value);
+                            }}
+                            className="w-full"
+                          />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="description">Deskripsi Kampanye *</Label>
+                          <Label htmlFor="description">
+                            Deskripsi Kampanye *
+                          </Label>
                           <Textarea
                             id="description"
                             placeholder="Jelaskan tujuan, latar belakang, dan mengapa kampanye ini penting..."
                             className="min-h-[120px]"
                             value={description}
-                            onChange={(e)=>{setDescription(e.target.value)}}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
                           />
                         </div>
                       </div>
@@ -147,18 +185,32 @@ export default function StartFundraisingPage() {
                         <div className="grid md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="target">Target Dana (IDR) *</Label>
-                            <Input id="target" type="number" value={target} onChange={handleTargetChange} placeholder="100000000" />
+                            <Input
+                              id="target"
+                              type="number"
+                              value={target}
+                              onChange={handleTargetChange}
+                              placeholder="100000000"
+                            />
                           </div>
 
                           <div className="space-y-2">
                             <Label htmlFor="deadline">Batas Waktu *</Label>
-                            <Input id="deadline" type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)}/>
+                            <Input
+                              id="deadline"
+                              type="date"
+                              value={deadline}
+                              onChange={(e) => setDeadline(e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
                       {/* Submit */}
                       <div className="flex flex-col sm:flex-row gap-4">
-                        <Button className="flex-1 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 cursor-pointer" onClick={HandleSubmit}>
+                        <Button
+                          className="flex-1 bg-gradient-to-r from-[#6B46C1] to-purple-800 hover:from-purple-700 hover:to-purple-900 cursor-pointer"
+                          onClick={HandleSubmit}
+                        >
                           Buat Kampanye
                         </Button>
                       </div>
@@ -171,11 +223,13 @@ export default function StartFundraisingPage() {
                   {/* Tips Card */}
                   <Card className="border-purple-200 bg-purple-50">
                     <CardHeader>
-                      <CardTitle className="text-lg text-purple-700">Tips Sukses</CardTitle>
+                      <CardTitle className="text-lg text-purple-700">
+                        Tips Sukses
+                      </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3 text-sm">
                       <div className="flex items-start gap-2">
-                        <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-[#6B46C1] mt-0.5 flex-shrink-0" />
                         <span>Gunakan judul yang jelas dan menarik</span>
                       </div>
                       <div className="flex items-start gap-2">
@@ -196,11 +250,13 @@ export default function StartFundraisingPage() {
                   {/* Process Card */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Proses Verifikasi</CardTitle>
+                      <CardTitle className="text-lg">
+                        Proses Verifikasi
+                      </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 text-sm">
                       <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                        <div className="w-6 h-6 bg-[#6B46C1] text-white rounded-full flex items-center justify-center text-xs font-bold">
                           1
                         </div>
                         <span>Submit kampanye</span>
@@ -228,5 +284,5 @@ export default function StartFundraisingPage() {
 
       <Footer />
     </div>
-  )
+  );
 }

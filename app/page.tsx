@@ -1,10 +1,16 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Shield, Users, TrendingUp, Clock, FileText, Zap } from "lucide-react"
-import Link from "next/link"
-import { NavBar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Shield, Users, TrendingUp, Clock, FileText, Zap } from "lucide-react";
+import Link from "next/link";
+import { NavBar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 export default function LandingPage() {
   return (
@@ -15,13 +21,18 @@ export default function LandingPage() {
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-8 text-center">
-              <Badge variant="outline" className="px-4 py-2 text-purple-600 border-purple-200">
+              <Badge
+                variant="outline"
+                className="px-4 py-2 text-[#6B46C1] border-purple-200"
+              >
                 <Zap className="w-4 h-4 mr-2" />
                 Platform Fundraising Web3
               </Badge>
 
               <div className="space-y-6 max-w-4xl">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">  Transparansi Fundraising dengan Blockchain
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-600 via-[#6B46C1] to-teal-600 bg-clip-text text-transparent">
+                  {" "}
+                  Transparansi Fundraising dengan Blockchain
                 </h1>
 
                 {/* <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-3xl mx-auto">
@@ -34,8 +45,9 @@ export default function LandingPage() {
                 </div> */}
 
                 <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                  Solusi fundraising berbasis blockchain yang memberikan transparansi penuh, sistem reputasi yang adil,
-                  dan keamanan dana melalui smart contract.
+                  Solusi fundraising berbasis blockchain yang memberikan
+                  transparansi penuh, sistem reputasi yang adil, dan keamanan
+                  dana melalui smart contract.
                 </p>
               </div>
 
@@ -43,7 +55,7 @@ export default function LandingPage() {
                 <Link href="/explore-donation">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-8 py-3 text-lg"
+                    className="bg-gradient-to-r from-[#6B46C1] to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-8 py-3 text-lg"
                   >
                     Explore Donation
                   </Button>
@@ -52,7 +64,7 @@ export default function LandingPage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-purple-200 text-purple-600 hover:bg-purple-50 px-8 py-3 text-lg"
+                    className="border-purple-200 text-[#6B46C1] hover:bg-purple-50 px-8 py-3 text-lg"
                   >
                     Start Fundraising
                   </Button>
@@ -63,7 +75,10 @@ export default function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 bg-white">
+        <section
+          id="how-it-works"
+          className="w-full py-12 md:py-24 lg:py-32 bg-white"
+        >
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center mb-12">
               <Badge variant="secondary" className="px-4 py-2">
@@ -73,8 +88,9 @@ export default function LandingPage() {
                 Sistem yang Transparan & Terpercaya
               </h2>
               <p className="max-w-3xl text-muted-foreground md:text-xl">
-                Platform kami menggunakan teknologi blockchain untuk memastikan setiap transaksi tercatat dengan aman
-                dan dapat diverifikasi oleh semua pihak.
+                Platform kami menggunakan teknologi blockchain untuk memastikan
+                setiap transaksi tercatat dengan aman dan dapat diverifikasi
+                oleh semua pihak.
               </p>
             </div>
 
@@ -83,7 +99,7 @@ export default function LandingPage() {
               <Card className="border-2 hover:border-purple-200 transition-colors">
                 <CardHeader>
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6 text-purple-600" />
+                    <Shield className="h-6 w-6 text-[#6B46C1]" />
                   </div>
                   <CardTitle className="text-xl">Reputasi Fundraiser</CardTitle>
                 </CardHeader>
@@ -101,7 +117,7 @@ export default function LandingPage() {
               <Card className="border-2 hover:border-purple-300 transition-colors">
                 <CardHeader>
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <Users className="h-6 w-6 text-purple-600" />
+                    <Users className="h-6 w-6 text-[#6B46C1]" />
                   </div>
                   <CardTitle className="text-xl">Reputasi Donatur</CardTitle>
                 </CardHeader>
@@ -110,7 +126,8 @@ export default function LandingPage() {
                     • Donatur membangun reputasi berdasarkan total donasi
                   </CardDescription>
                   <CardDescription className="text-base">
-                    • Hanya donatur dengan reputasi baik yang bisa menjadi fundraiser
+                    • Hanya donatur dengan reputasi baik yang bisa menjadi
+                    fundraiser
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -119,13 +136,16 @@ export default function LandingPage() {
               <Card className="border-2 hover:border-purple-300 transition-colors">
                 <CardHeader>
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <FileText className="h-6 w-6 text-purple-600" />
+                    <FileText className="h-6 w-6 text-[#6B46C1]" />
                   </div>
-                  <CardTitle className="text-xl">Transparansi Keuangan</CardTitle>
+                  <CardTitle className="text-xl">
+                    Transparansi Keuangan
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base">
-                    Semua transaksi ditampilkan dalam bentuk laporan keuangan yang dapat diakses publik
+                    Semua transaksi ditampilkan dalam bentuk laporan keuangan
+                    yang dapat diakses publik
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -134,13 +154,14 @@ export default function LandingPage() {
               <Card className="border-2 hover:border-purple-300 transition-colors">
                 <CardHeader>
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <Clock className="h-6 w-6 text-purple-600" />
+                    <Clock className="h-6 w-6 text-[#6B46C1]" />
                   </div>
                   <CardTitle className="text-xl">Penarikan Dana</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base">
-                    Dana hanya bisa ditarik sesuai tenggat waktu yang ditentukan untuk mencegah penyalahgunaan
+                    Dana hanya bisa ditarik sesuai tenggat waktu yang ditentukan
+                    untuk mencegah penyalahgunaan
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -149,13 +170,14 @@ export default function LandingPage() {
               <Card className="border-2 hover:border-purple-300 transition-colors md:col-span-2 lg:col-span-1">
                 <CardHeader>
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <TrendingUp className="h-6 w-6 text-purple-600" />
+                    <TrendingUp className="h-6 w-6 text-[#6B46C1]" />
                   </div>
                   <CardTitle className="text-xl">Smart Contract</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base">
-                    Dana disimpan di smart contract agar mudah dilacak dan tidak dapat disalahgunakan
+                    Dana disimpan di smart contract agar mudah dilacak dan tidak
+                    dapat disalahgunakan
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -164,43 +186,55 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-purple-50 to-white">
+        <section
+          id="features"
+          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-purple-50 to-white"
+        >
           <div className="container px-4 md:px-6">
             <div className="grid gap-10 lg:grid-cols-2 items-center">
               <div className="space-y-6">
-                <Badge variant="outline" className="px-4 py-2 text-purple-600 border-purple-200">
+                <Badge
+                  variant="outline"
+                  className="px-4 py-2 text-[#6B46C1] border-purple-200"
+                >
                   Keunggulan Platform
                 </Badge>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Mengapa Memilih Donad?</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  Mengapa Memilih Donad?
+                </h2>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-[#6B46C1] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs font-bold">✓</span>
                     </div>
                     <div>
                       <h3 className="font-semibold">100% Transparan</h3>
                       <p className="text-muted-foreground">
-                        Setiap transaksi tercatat di blockchain dan dapat diverifikasi
+                        Setiap transaksi tercatat di blockchain dan dapat
+                        diverifikasi
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-[#6B46C1] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs font-bold">✓</span>
                     </div>
                     <div>
                       <h3 className="font-semibold">Keamanan Terjamin</h3>
-                      <p className="text-muted-foreground">Smart contract melindungi dana dari penyalahgunaan</p>
+                      <p className="text-muted-foreground">
+                        Smart contract melindungi dana dari penyalahgunaan
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-[#6B46C1] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs font-bold">✓</span>
                     </div>
                     <div>
                       <h3 className="font-semibold">Sistem Reputasi</h3>
                       <p className="text-muted-foreground">
-                        Membangun kepercayaan melalui track record yang terverifikasi
+                        Membangun kepercayaan melalui track record yang
+                        terverifikasi
                       </p>
                     </div>
                   </div>
@@ -209,17 +243,24 @@ export default function LandingPage() {
               <div className="bg-white rounded-2xl p-8 shadow-xl border">
                 <div className="space-y-6">
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-2">Mulai Fundraising Anda</h3>
-                    <p className="text-muted-foreground">Bergabunglah dengan platform fundraising masa depan</p>
+                    <h3 className="text-2xl font-bold mb-2">
+                      Mulai Fundraising Anda
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Bergabunglah dengan platform fundraising masa depan
+                    </p>
                   </div>
                   <div className="space-y-4">
                     <Link href="/explore-donation">
-                      <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white py-3">
+                      <Button className="w-full bg-gradient-to-r from-[#6B46C1] to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white py-3">
                         Explore Donation
                       </Button>
                     </Link>
                     <Link href="/start-fundraising">
-                      <Button variant="outline" className="w-full border-purple-200 text-purple-600 hover:bg-purple-50 py-3">
+                      <Button
+                        variant="outline"
+                        className="w-full border-purple-200 text-[#6B46C1] hover:bg-purple-50 py-3"
+                      >
                         Start Fundraising
                       </Button>
                     </Link>
@@ -246,14 +287,14 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/explore-donation">
-                  <Button size="lg" className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-3 text-lg font-semibold">
+                  <Button size="lg" className="bg-white text-[#6B46C1] hover:bg-purple-50 px-8 py-3 text-lg font-semibold">
                     Explore Donation
                   </Button>
                 </Link>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-3 text-lg"
+                  className="border-white text-white hover:bg-white hover:text-[#6B46C1] px-8 py-3 text-lg"
                 >
                   Pelajari Lebih Lanjut
                 </Button>
@@ -264,5 +305,5 @@ export default function LandingPage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }

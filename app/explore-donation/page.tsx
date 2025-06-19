@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,14 +23,15 @@ export default function ExploreDonationPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-16 bg-gradient-to-r from-purple-600 to-purple-800">
+        <section className="w-full py-12 md:py-16 bg-gradient-to-r from-[#6B46C1] to-purple-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
                 Jelajahi Kampanye Donasi
               </h1>
               <p className="max-w-2xl text-blue-100 md:text-xl">
-                Temukan kampanye fundraising yang transparan dan terpercaya. Setiap donasi Anda tercatat di blockchain.
+                Temukan kampanye fundraising yang transparan dan terpercaya.
+                Setiap donasi Anda tercatat di blockchain.
               </p>
             </div>
           </div>
@@ -81,24 +82,39 @@ export default function ExploreDonationPage() {
           <div className="container px-4 md:px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-blue-600">{campaigns.length}</div>
-                <div className="text-sm text-muted-foreground">Kampanye Aktif</div>
+                <div className="text-2xl md:text-3xl font-bold text-blue-600">
+                  {campaigns.length}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Kampanye Aktif
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-teal-600">
                   {campaigns.reduce((sum, c) => sum + Number(c.donorsCount), 0)}
                 </div>
-                <div className="text-sm text-muted-foreground">Total Donatur</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-purple-600">
-                  {campaigns.reduce((sum, c) => sum + Number(c.accumulatedAmount), 0)}
+                <div className="text-sm text-muted-foreground">
+                  Total Donatur
                 </div>
-                <div className="text-sm text-muted-foreground">Total Terkumpul</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-green-600">24/7</div>
-                <div className="text-sm text-muted-foreground">Transparansi</div>
+                <div className="text-2xl md:text-3xl font-bold text-[#6B46C1]">
+                  {campaigns.reduce(
+                    (sum, c) => sum + Number(c.accumulatedAmount),
+                    0
+                  )}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Total Terkumpul
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-bold text-green-600">
+                  24/7
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Transparansi
+                </div>
               </div>
             </div>
           </div>
@@ -111,8 +127,12 @@ export default function ExploreDonationPage() {
               <div className="text-center py-12">
                 <div className="text-gray-500 mb-4">
                   <Heart className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                  <h3 className="text-xl font-semibold mb-2">Belum Ada Kampanye</h3>
-                  <p className="text-muted-foreground">Kampanye fundraising akan muncul di sini setelah dibuat.</p>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Belum Ada Kampanye
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Kampanye fundraising akan muncul di sini setelah dibuat.
+                  </p>
                 </div>
                 <Link href="/start-fundraising">
                   <Button className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700">
@@ -125,15 +145,24 @@ export default function ExploreDonationPage() {
                 {campaigns?.map((campaign) => {
                   const progressPercentage =
                     Number(campaign.targetAmount) > 0
-                      ? Math.round((Number(campaign.accumulatedAmount) / Number(campaign.targetAmount)) * 100)
-                      : 0
-                  const daysLeft = getDaysLeft(Number(campaign.targetDate))
-                  const isActive = daysLeft > 0
+                      ? Math.round(
+                          (Number(campaign.accumulatedAmount) /
+                            Number(campaign.targetAmount)) *
+                            100
+                        )
+                      : 0;
+                  const daysLeft = getDaysLeft(Number(campaign.targetDate));
+                  const isActive = daysLeft > 0;
 
                   return (
-                    <Card key={Number(campaign.id)} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <Card
+                      key={Number(campaign.id)}
+                      className="overflow-hidden hover:shadow-lg transition-shadow"
+                    >
                       <div className="aspect-video bg-gray-100 relative">
-                        <Badge className="absolute top-3 left-3 bg-white text-gray-700">{campaign.category}</Badge>
+                        <Badge className="absolute top-3 left-3 bg-white text-gray-700">
+                          {campaign.category}
+                        </Badge>
                         {campaign.verified && (
                           <Badge className="absolute top-3 right-3 bg-green-500 text-white">
                             <Shield className="w-3 h-3 mr-1" />
@@ -141,21 +170,31 @@ export default function ExploreDonationPage() {
                           </Badge>
                         )}
                         {!isActive && (
-                          <Badge className="absolute bottom-3 left-3 bg-red-500 text-white">Berakhir</Badge>
+                          <Badge className="absolute bottom-3 left-3 bg-red-500 text-white">
+                            Berakhir
+                          </Badge>
                         )}
                       </div>
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
-                          <CardTitle className="text-lg line-clamp-2">{campaign.title}</CardTitle>
+                          <CardTitle className="text-lg line-clamp-2">
+                            {campaign.title}
+                          </CardTitle>
                         </div>
-                        <CardDescription className="line-clamp-2">{campaign.description}</CardDescription>
+                        <CardDescription className="line-clamp-2">
+                          {campaign.description}
+                        </CardDescription>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Wallet className="w-3 h-3" />
-                          <code className="font-mono">{formatAddress(campaign.fundraiser)}</code>
+                          <code className="font-mono">
+                            {formatAddress(campaign.fundraiser)}
+                          </code>
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => navigator.clipboard.writeText(campaign.fundraiser)}
+                            onClick={() =>
+                              navigator.clipboard.writeText(campaign.fundraiser)
+                            }
                             className="h-4 w-4 p-0"
                           >
                             <Copy className="w-3 h-3" />
@@ -168,10 +207,17 @@ export default function ExploreDonationPage() {
                             <span className="font-medium">Terkumpul</span>
                             <span>{progressPercentage}%</span>
                           </div>
-                          <Progress value={progressPercentage} className="h-2" />
+                          <Progress
+                            value={progressPercentage}
+                            className="h-2"
+                          />
                           <div className="flex justify-between text-sm text-muted-foreground">
-                            <span>{Number(campaign.accumulatedAmount)} DON</span>
-                            <span>dari {Number(campaign.targetAmount)} DON</span>
+                            <span>
+                              {Number(campaign.accumulatedAmount)} DON
+                            </span>
+                            <span>
+                              dari {Number(campaign.targetAmount)} DON
+                            </span>
                           </div>
                         </div>
 
@@ -182,18 +228,29 @@ export default function ExploreDonationPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
-                            <span>{isActive ? `${daysLeft} hari lagi` : "Berakhir"}</span>
+                            <span>
+                              {isActive ? `${daysLeft} hari lagi` : "Berakhir"}
+                            </span>
                           </div>
                         </div>
 
                         <div className="text-xs text-muted-foreground">
-                          <div>Target: {formatDate(Number(campaign.targetDate))}</div>
-                          {Number(campaign.totalWithdrawAmount) > 0 && <div>Ditarik: {Number(campaign.totalWithdrawAmount)} DON</div>}
+                          <div>
+                            Target: {formatDate(Number(campaign.targetDate))}
+                          </div>
+                          {Number(campaign.totalWithdrawAmount) > 0 && (
+                            <div>
+                              Ditarik: {Number(campaign.totalWithdrawAmount)}{" "}
+                              DON
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex items-center justify-between pt-2 border-t">
                           <div className="text-sm">
-                            <div className="font-medium">Campaign #{Number(campaign.id)}</div>
+                            <div className="font-medium">
+                              Campaign #{Number(campaign.id)}
+                            </div>
                             <div className="text-muted-foreground flex items-center gap-1">
                               <TrendingUp className="w-3 h-3" />
                               {isActive ? "Aktif" : "Berakhir"}
@@ -211,7 +268,7 @@ export default function ExploreDonationPage() {
                         </div>
                       </CardContent>
                     </Card>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -231,5 +288,5 @@ export default function ExploreDonationPage() {
       {/* Footer */}
       <Footer />
     </div>
-  )
+  );
 }

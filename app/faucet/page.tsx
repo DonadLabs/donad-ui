@@ -1,67 +1,70 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import {  Wallet, Coins, CheckCircle, Zap, CircleX } from "lucide-react"
-import { useState } from "react"
-import { NavBar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Wallet, Coins, CheckCircle, Zap, CircleX } from "lucide-react";
+import { useState } from "react";
+import { NavBar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { useAccount } from "wagmi";
-import { useWriteFaucetMinting } from "@/hooks/writeContracts"
-import { useReadUserHasMinted } from "@/hooks/readContract"
+import { useWriteFaucetMinting } from "@/hooks/writeContracts";
+import { useReadUserHasMinted } from "@/hooks/readContract";
 
 export default function FaucetPage() {
-  const [isLoading, setIsLoading] = useState(false)
-  const claimAmount = 100000
-  const [showSuccess, setShowSuccess] = useState(false)
-  const [showError, setShowError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
+  const claimAmount = 100000;
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const {FaucetMinting} = useWriteFaucetMinting()
-  const {isConnected, address} = useAccount()
-  const userHasMinted = useReadUserHasMinted(address)
+  const { FaucetMinting } = useWriteFaucetMinting();
+  const { isConnected, address } = useAccount();
+  const userHasMinted = useReadUserHasMinted(address);
   const handleClaim = async () => {
-    if (!isConnected) return
-    if(userHasMinted){
-      setShowError(true)
-      setErrorMessage("You have minted the token!")
+    if (!isConnected) return;
+    if (userHasMinted) {
+      setShowError(true);
+      setErrorMessage("You have minted the token!");
       setTimeout(() => {
-      setShowError(false)
-    }, 5000)
-      return
+        setShowError(false);
+      }, 5000);
+      return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const tx = await FaucetMinting()
-      setShowSuccess(true)
-    } catch (err:any) {
-      console.error('TX Error:', err)
-      setErrorMessage(err?.cause?.cause?.shortMessage)
+      const tx = await FaucetMinting();
+      setShowSuccess(true);
+    } catch (err: any) {
+      console.error("TX Error:", err);
+      setErrorMessage(err?.cause?.cause?.shortMessage);
 
-      setShowError(true)
+      setShowError(true);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  
+
     // Hide success message after 5 seconds
     setTimeout(() => {
-      setShowSuccess(false) 
-      setShowError(false)
-    }, 5000)
-  }
+      setShowSuccess(false);
+      setShowError(false);
+    }, 5000);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <NavBar/>
+      <NavBar />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-16 bg-gradient-to-r from-purple-600 to-purple-800">
+        <section className="w-full py-12 md:py-16 bg-gradient-to-r from-[#6B46C1] to-purple-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
-              <Badge variant="outline" className="px-4 py-2 text-white border-white/20 bg-white/10">
+              <Badge
+                variant="outline"
+                className="px-4 py-2 text-white border-white/20 bg-white/10"
+              >
                 <Coins className="w-4 h-4 mr-2" />
                 Testnet Faucet
               </Badge>
@@ -94,7 +97,8 @@ export default function FaucetPage() {
                         <Alert className="border-green-200 bg-green-50">
                           <CheckCircle className="h-4 w-4 text-green-600" />
                           <AlertDescription className="text-green-700">
-                            Berhasil! {claimAmount} $DON token telah dikirim ke wallet Anda.
+                            Berhasil! {claimAmount} $DON token telah dikirim ke
+                            wallet Anda.
                           </AlertDescription>
                         </Alert>
                       )}
@@ -111,7 +115,7 @@ export default function FaucetPage() {
                         <Button
                           onClick={handleClaim}
                           disabled={isLoading || !isConnected}
-                          className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 h-12 text-lg"
+                          className="w-full bg-gradient-to-r from-[#6B46C1] to-purple-800 hover:from-purple-700 hover:to-purple-900 h-12 text-lg"
                         >
                           {isLoading ? (
                             <>
@@ -135,20 +139,27 @@ export default function FaucetPage() {
                   {/* How to Use */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Cara Menggunakan</CardTitle>
+                      <CardTitle className="text-lg">
+                        Cara Menggunakan
+                      </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 text-sm">
                       <div className="flex items-start gap-3">
                         <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                           1
                         </div>
-                        <span>Pastikan Anda memiliki wallet Ethereum (MetaMask, Trust Wallet, dll)</span>
+                        <span>
+                          Pastikan Anda memiliki wallet Ethereum (MetaMask,
+                          Trust Wallet, dll)
+                        </span>
                       </div>
                       <div className="flex items-start gap-3">
                         <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
                           2
                         </div>
-                        <span>Tambahkan network Monad Testnet ke wallet Anda</span>
+                        <span>
+                          Tambahkan network Monad Testnet ke wallet Anda
+                        </span>
                       </div>
                       <div className="flex items-start gap-3">
                         <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
@@ -165,7 +176,7 @@ export default function FaucetPage() {
         </section>
       </main>
 
-      <Footer/>
+      <Footer />
     </div>
-  )
+  );
 }
