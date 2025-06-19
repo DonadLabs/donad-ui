@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -9,13 +9,13 @@ export function Footer() {
       <nav className="sm:ml-auto flex gap-4 sm:gap-6 items-center">
         <Link
           href="#"
-          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-purple-600"
+          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-[#6B46C1]"
         >
           Syarat & Ketentuan
         </Link>
         <Link
           href="#"
-          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-purple-600"
+          className="text-xs hover:underline underline-offset-4 text-muted-foreground hover:text-[#6B46C1]"
         >
           Kebijakan Privasi
         </Link>
@@ -27,5 +27,5 @@ export function Footer() {
         </Link>
       </nav>
     </footer>
-  )
+  );
 }

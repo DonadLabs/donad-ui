@@ -23,7 +23,7 @@ export function NavBar() {
           alt="Donad Logo"
           className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
         />
-        <span className="ml-2 text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+        <span className="ml-2 text-xl font-bold bg-[#6B46C1] bg-clip-text text-transparent">
           Donad
         </span>
       </Link>
