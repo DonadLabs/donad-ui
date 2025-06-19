@@ -27,32 +27,20 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { NavBar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { useReadGetFundraisingDetail } from "@/hooks/readContract";
+import { useReadGetDonationHistories, useReadGetFundraisingDetail } from "@/hooks/readContract";
+import { formatAddress, formatCurrency, timeAgo } from "@/app/utils";
 
 const donationAmounts = [50000, 100000, 250000, 500000, 1000000, 2500000];
-
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "DON",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
-function formatAddress(address: string) {
-  if (!address) return ''
-  return `${address.slice(0, 6)}...${address.slice(-5)}`
-}
-
 
 export default function DonatePage() {
   const params = useParams();
   const campaignId = Number.parseInt(params.id as string);
   const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
+  const donationHistories = useReadGetDonationHistories(campaignId)
+  console.log({ donationHistories })
   const now = Math.floor(Date.now() / 1000)
   const daysLeft = Math.ceil((Number(fundraiseDetail?.targetDate) - now) / (60 * 60 * 24))
-  
+
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -275,32 +263,35 @@ export default function DonatePage() {
                       <CardTitle>Donatur Terbaru</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      {[...Array(5)].map((_, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-4 p-4 border rounded-lg"
-                        >
+                      {donationHistories.map((el, idx) =>
+                        <div key={idx} className="flex items-center gap-4 p-4 border rounded-lg">
                           <Avatar>
                             <AvatarImage
                               src={`/placeholder.svg?height=40&width=40`}
                             />
-                            <AvatarFallback>D{index + 1}</AvatarFallback>
+                            <AvatarFallback>D{idx + 1}</AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
-                            <div className="font-medium">Donatur Anonim</div>
+                            <div className="font-medium">
+                              <a
+                                href={`https://testnet.monadexplorer.com/address/${fundraiseDetail?.fundraiser}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {formatAddress(el.donor)}
+                              </a>
+                            </div>
                             <div className="text-sm text-muted-foreground">
-                              2 hari yang lalu
+                              {timeAgo(Number(el.timestamp))}
                             </div>
                           </div>
                           <div className="text-right">
                             <div className="font-semibold text-blue-600">
-                              {formatCurrency(
-                                Math.floor(Math.random() * 500000) + 50000
-                              )}
+                              {Number(el.amount)} DON
                             </div>
                           </div>
                         </div>
-                      ))}
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -432,9 +423,8 @@ export default function DonatePage() {
             </div>
           </div>
         </div>
-      </main>
-
+      </main >
       <Footer />
-    </div>
+    </div >
   );
 }

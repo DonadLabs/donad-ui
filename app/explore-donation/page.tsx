@@ -11,37 +11,11 @@ import { Progress } from "@/components/ui/progress"
 import { NavBar } from "@/components/navbar"
 import { useReadGetFundraisings } from "@/hooks/readContract"
 import { Footer } from "@/components/footer"
-
-// Real data from smart contract
-
-function formatCurrency(amount: number) {
-  // For blockchain amounts, we might need to handle different decimals
-  // Assuming the amount is in wei or smallest unit
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount)
-}
-
-function formatAddress(address: string) {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`
-}
-
-function formatDate(timestamp: number) {
-  return new Date(timestamp * 1000).toLocaleDateString("id-ID")
-}
-
-function getDaysLeft(targetTimestamp: number) {
-  const now = Math.floor(Date.now() / 1000)
-  const daysLeft = Math.ceil((targetTimestamp - now) / (24 * 60 * 60))
-  return Math.max(0, daysLeft)
-}
+import { formatAddress, formatDate, getDaysLeft } from "../utils"
 
 export default function ExploreDonationPage() {
   const campaigns = useReadGetFundraisings();
-  
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
@@ -255,7 +229,7 @@ export default function ExploreDonationPage() {
       </main>
 
       {/* Footer */}
-      <Footer/>
+      <Footer />
     </div>
   )
 }
