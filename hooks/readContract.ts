@@ -1,4 +1,4 @@
-import { useReadContract } from "wagmi";
+import { useReadContract, useReadContracts } from "wagmi";
 import {
   donContract, donadManagerContract
 } from "../contracts/contracts";
@@ -78,13 +78,23 @@ export const useReadTokenAllowance = (owner: `0x${string}` | undefined) => {
   return allowance as bigint | undefined;
 };
 
-export const useReadGetFundraisings = (): Campaign[] => {
-  const { data: fundraisings } = useReadContract({
+export const useReadGetFundraisings = (ids: number[]): Campaign[] => {
+  const getFundraiseDetailsContract = {
     address: donadManagerContract.address,
     abi: donadManagerContract.abi,
-    functionName: "getFundraisings",
-  }) as { data: Campaign[] };
+    functionName: "getFundraiseDetails",
+  } as const;
 
+  const readContracts: any[] = ids.map((id) => ({
+    ...getFundraiseDetailsContract,
+    args: [id] as const,
+  }));
+
+  const { data: fundraisingsData } = useReadContracts({
+    contracts: readContracts,
+  });
+
+  const fundraisings: Campaign[] = fundraisingsData?.map(fundraising => fundraising?.result as Campaign) ?? [];
   return fundraisings ?? [];
 };
 
