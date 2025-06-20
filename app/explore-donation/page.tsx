@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -10,11 +12,27 @@ import Link from "next/link"
 import { Progress } from "@/components/ui/progress"
 import { NavBar } from "@/components/navbar"
 import { useReadGetFundraisings } from "@/hooks/readContract"
+import { useFetchGetFundraisings } from "@/hooks/fetchGraphql"
 import { Footer } from "@/components/footer"
 import { formatAddress, formatDate, getDaysLeft } from "../utils"
 
 export default function ExploreDonationPage() {
-  const campaigns = useReadGetFundraisings();
+  const getFundraisingGraphQL = useFetchGetFundraisings();
+  const [campaignsGraphQLData, setCampaignsGraphQLData] = useState<any[]>([]);
+  const campaigns = useReadGetFundraisings(campaignsGraphQLData.map(c => Number(c.fundraiseId)));
+
+  useEffect(() => {
+    const fetchFundraisingGraphQLData = async () => {
+      try {
+        const data = await getFundraisingGraphQL;
+        setCampaignsGraphQLData(data);
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
+
+    fetchFundraisingGraphQLData();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
