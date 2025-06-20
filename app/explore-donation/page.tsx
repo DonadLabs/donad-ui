@@ -14,7 +14,7 @@ import { NavBar } from "@/components/navbar"
 import { useReadGetFundraisings } from "@/hooks/readContract"
 import { useFetchGetFundraisings } from "@/hooks/fetchGraphql"
 import { Footer } from "@/components/footer"
-import { formatAddress, formatDate, getDaysLeft } from "../utils"
+import { formatAddress, formatCurrency, formatDate, getDaysLeft } from "../utils"
 
 export default function ExploreDonationPage() {
   const getFundraisingGraphQL = useFetchGetFundraisings();
@@ -56,7 +56,7 @@ export default function ExploreDonationPage() {
         </section>
 
         {/* Search and Filter Section */}
-        <section className="w-full py-8 bg-white border-b">
+        {/* <section className="w-full py-8 bg-white border-b">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div className="relative flex-1 max-w-md">
@@ -93,7 +93,7 @@ export default function ExploreDonationPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Stats Section */}
         <section className="w-full py-8 bg-gradient-to-r from-blue-50 to-teal-50">
@@ -117,10 +117,10 @@ export default function ExploreDonationPage() {
               </div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-[#6B46C1]">
-                  {campaigns.reduce(
-                    (sum, c) => sum + Number(c.accumulatedAmount),
+                  {formatCurrency(campaigns.reduce(
+                    (sum, c) => sum + Number(c.accumulatedAmount) / 1e6,
                     0
-                  )}
+                  ))}
                 </div>
                 <div className="text-sm text-muted-foreground">
                   Total Terkumpul
@@ -164,10 +164,10 @@ export default function ExploreDonationPage() {
                   const progressPercentage =
                     Number(campaign.targetAmount) > 0
                       ? Math.round(
-                          (Number(campaign.accumulatedAmount) /
-                            Number(campaign.targetAmount)) *
-                            100
-                        )
+                        (Number(campaign.accumulatedAmount) /
+                          Number(campaign.targetAmount)) *
+                        100
+                      )
                       : 0;
                   const daysLeft = getDaysLeft(Number(campaign.targetDate));
                   const isActive = daysLeft > 0;
@@ -223,7 +223,7 @@ export default function ExploreDonationPage() {
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span className="font-medium">Terkumpul</span>
-                            <span>{progressPercentage}%</span>
+                            <span>{progressPercentage > 100 ? 100 : progressPercentage}%</span>
                           </div>
                           <Progress
                             value={progressPercentage}
@@ -231,10 +231,10 @@ export default function ExploreDonationPage() {
                           />
                           <div className="flex justify-between text-sm text-muted-foreground">
                             <span>
-                              {Number(campaign.accumulatedAmount)} DON
+                              {formatCurrency(Number(campaign.accumulatedAmount) / 1e6)}
                             </span>
                             <span>
-                              dari {Number(campaign.targetAmount)} DON
+                              dari {formatCurrency(Number(campaign.targetAmount) / 1e6)}
                             </span>
                           </div>
                         </div>

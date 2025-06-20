@@ -1,4 +1,4 @@
-import { useWriteContract} from "wagmi";
+import { useWriteContract } from "wagmi";
 import {
     donadManagerContract,
     donContract,
@@ -14,12 +14,12 @@ export const useWriteFaucetMinting = () => {
             args: []
         });
     }
-    return {hash, FaucetMinting, error};
+    return { hash, FaucetMinting, error };
 };
 
 export const useWriteCreateFundraising = () => {
     const { data: hash, error, writeContractAsync } = useWriteContract();
-    const CreateFundraising = (title:string, description:string, amount:number, deadline:number) => {
+    const CreateFundraising = (title: string, description: string, amount: number, deadline: number) => {
         return writeContractAsync({
             address: donadManagerContract.address,
             abi: donadManagerContract.abi,
@@ -27,7 +27,7 @@ export const useWriteCreateFundraising = () => {
             args: [title, description, amount, deadline]
         });
     }
-    return {hash, CreateFundraising, error};
+    return { hash, CreateFundraising, error };
 };
 
 export const useWriteApproveToken = () => {
@@ -40,7 +40,7 @@ export const useWriteApproveToken = () => {
             args: [donadManagerContract.address, amount]
         });
     }
-    return {hash, ApproveToken, error};
+    return { hash, ApproveToken, error };
 };
 
 export const useWriteDonate = () => {
@@ -53,5 +53,18 @@ export const useWriteDonate = () => {
             args: [fundraiseId, amount]
         });
     }
-    return {hash, Donate, error};
+    return { hash, Donate, error };
+};
+
+export const useWriteWithdraw = () => {
+    const { data: hash, error, writeContractAsync } = useWriteContract();
+    const Withdraw = (fundraiseId: number, amount: bigint, remarks: string, withdrawalAddress: string) => {
+        return writeContractAsync({
+            address: donadManagerContract.address,
+            abi: donadManagerContract.abi,
+            functionName: "withdrawFundraising",
+            args: [fundraiseId, amount, remarks, withdrawalAddress]
+        });
+    }
+    return { hash, Withdraw, error };
 };

@@ -8,8 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Shield,
   Share2,
@@ -36,17 +35,18 @@ import DonateCard from "./donateCard";
 import DonorsTab from "./donorsTab";
 import WithdrawalsTab from "./withdrawalsTab";
 import DescriptionTab from "./descriptionTab";
+import WithdrawCard from "./withdrawCard";
 
 export default function DonatePage() {
   const params = useParams();
   const { address, isConnected } = useAccount();
   const campaignId = Number.parseInt(params.id as string);
   const { addToast } = useToast();
-
   const userBalance = useReadTokenBalance(address);
   const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
   const donationHistories = useReadGetDonationHistories(campaignId)
   const withdrawals = useReadGetWithdrawals(campaignId)
+  const isFundraiser = address === fundraiseDetail?.fundraiser
   const amountLeft = Number(fundraiseDetail?.targetAmount) / 1e6 - Number(fundraiseDetail?.accumulatedAmount) / 1e6
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -263,6 +263,7 @@ export default function DonatePage() {
                 </Card>
               )}
               <DonateCard fundraiseDetail={fundraiseDetail} />
+              {isFundraiser ? <WithdrawCard fundraiseDetail={fundraiseDetail} /> : <></>}
 
               <Card className="border-green-200 bg-green-50">
                 <CardHeader>

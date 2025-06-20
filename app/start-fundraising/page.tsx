@@ -45,7 +45,8 @@ export default function StartFundraisingPage() {
 
   function HandleSubmit() {
     const dateInSeconds = Math.floor(new Date(deadline).getTime() / 1000);
-    CreateFundraising(title, description, target, dateInSeconds);
+    const targetInBigInt = target * 1e6;
+    CreateFundraising(title, description, targetInBigInt, dateInSeconds);
   }
 
   return (
