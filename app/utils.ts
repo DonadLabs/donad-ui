@@ -16,7 +16,6 @@ export function timeAgo(timestamp: number) {
     const now = Math.floor(new Date().getTime() / 1000)
     const past = new Date(timestamp).getTime()
     const diff = Math.floor((now - past)) // in seconds
-    console.log({ timestamp, now, past, diff })
 
     if (diff < 60) return `${diff} detik lalu`
     if (diff < 3600) return `${Math.floor(diff / 60)} menit lalu`
