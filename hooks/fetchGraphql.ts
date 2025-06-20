@@ -33,12 +33,8 @@ export const useFetchGetFundraisings = async (): Promise<Fundraising[]> => {
         }),
         method: "POST",
     }).then(async (res) => {
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
         const json = await res.json();
-        const items = json.data.fundraisingRegistereds.items;
+        const items = json?.data?.fundraisingRegistereds.items ?? [];
         return items;
     }).catch((error) => {
         console.log({ error });
