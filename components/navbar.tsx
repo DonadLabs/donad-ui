@@ -5,6 +5,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 
+import DonadLogo from "../public/donad.png";
+
 export function NavBar() {
   const pathname = usePathname()
 
@@ -19,10 +21,10 @@ export function NavBar() {
     <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
       <Link href="/" className="flex items-center justify-center">
         <img 
-            src="D:\Kelas Rutin BlockDevId\donad-ui\u\src\logo.png" 
-            alt="Donad Logo" 
-            className="w-8 h-8 rounded-lg"
-/>
+          src={DonadLogo.src as string} 
+          alt="Donad Logo" 
+          className="w-8 h-8 rounded-lg"
+        />
         <span className="ml-2 text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
           Donad
         </span>
