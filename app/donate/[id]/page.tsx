@@ -5,24 +5,17 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Shield,
-  Heart,
   Share2,
   Flag,
   ArrowLeft,
   CheckCircle,
-  AlertTriangle,
-  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
@@ -33,16 +26,16 @@ import { Footer } from "@/components/footer";
 import {
   useReadGetFundraisingDetail,
   useReadTokenBalance,
-  useReadTokenAllowance,
-  useReadGetWithdrawals,
   useReadGetDonationHistories,
+  useReadGetWithdrawals,
 } from "@/hooks/readContract";
-import { useWriteApproveToken, useWriteDonate } from "@/hooks/writeContracts";
 import { useToast } from "@/components/ui/toast";
 import { formatAddress, formatCurrency, timeAgo } from "@/app/utils";
 import { useAccount } from "wagmi";
-
-const donationAmounts = [5, 10, 25, 50, 100, 250];
+import DonateCard from "./donateCard";
+import DonorsTab from "./donorsTab";
+import WithdrawalsTab from "./withdrawalsTab";
+import DescriptionTab from "./descriptionTab";
 
 export default function DonatePage() {
   const params = useParams();
@@ -51,23 +44,12 @@ export default function DonatePage() {
   const { addToast } = useToast();
 
   const userBalance = useReadTokenBalance(address);
-  const userAllowance = useReadTokenAllowance(address);
-  const { ApproveToken } = useWriteApproveToken();
-  const { Donate } = useWriteDonate();
   const fundraiseDetail = useReadGetFundraisingDetail(campaignId)
   const donationHistories = useReadGetDonationHistories(campaignId)
-  const withdrawal = useReadGetWithdrawals(campaignId)
-  const isFundraiser = address === fundraiseDetail?.fundraiser
-  console.log({ fundraiseDetail })
+  const withdrawals = useReadGetWithdrawals(campaignId)
   const amountLeft = Number(fundraiseDetail?.targetAmount) / 1e6 - Number(fundraiseDetail?.accumulatedAmount) / 1e6
-
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
-  const [customAmount, setCustomAmount] = useState("");
-  const [isApproving, setIsApproving] = useState(false);
-  const [isDonating, setIsDonating] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   // useEffect MUST be before early returns
   useEffect(() => {
@@ -91,123 +73,6 @@ export default function DonatePage() {
       100
     )
     : 0;
-  const finalAmount = selectedAmount || Number.parseInt(customAmount) || 0;
-  const finalAmountBigInt = BigInt(finalAmount * 1e6);
-  const needsApproval =
-    finalAmount > 0 &&
-    (userAllowance ? userAllowance < finalAmountBigInt : true);
-  const hasSufficientBalance =
-    finalAmount > 0 && (userBalance ? userBalance >= finalAmountBigInt : false);
-
-  // Event handlers
-  const handleApprove = async () => {
-    if (!isConnected || finalAmount === 0) return;
-    setIsApproving(true);
-    setShowError(false);
-
-    try {
-      addToast({
-        type: "info",
-        title: "Persetujuan Token",
-        description: "Sedang memproses persetujuan token...",
-        duration: 3000,
-      });
-
-      await ApproveToken(finalAmountBigInt);
-
-      // Success notification
-      addToast({
-        type: "success",
-        title: "✅ Token Disetujui!",
-        description: `Berhasil menyetujui ${formatCurrency(
-          finalAmount
-        )}. Sekarang Anda bisa melakukan donasi.`,
-        duration: 5000,
-      });
-
-      setShowSuccess(true);
-      setErrorMessage("");
-    } catch (error: unknown) {
-      const err = error as { cause?: { cause?: { shortMessage?: string } } };
-      const errorMsg = err?.cause?.cause?.shortMessage || "Approval failed";
-
-      addToast({
-        type: "error",
-        title: "❌ Persetujuan Gagal",
-        description:
-          errorMsg === "User rejected the request."
-            ? "Transaksi dibatalkan oleh pengguna"
-            : errorMsg,
-        duration: 5000,
-      });
-
-      setErrorMessage(errorMsg);
-      setShowError(true);
-    } finally {
-      setIsApproving(false);
-    }
-  };
-
-  const handleDonate = async () => {
-    if (!isConnected || finalAmount === 0) return;
-    setIsDonating(true);
-    setShowError(false);
-
-    try {
-      addToast({
-        type: "info",
-        title: "Memproses Donasi",
-        description: "Sedang mengirim donasi Anda...",
-        duration: 3000,
-      });
-
-      await Donate(campaignId, finalAmountBigInt);
-
-      // Success notification with celebration
-      addToast({
-        type: "success",
-        title: "🎉 Donasi Berhasil!",
-        description: `Terima kasih! Anda telah mendonasikan ${formatCurrency(
-          finalAmount
-        )} untuk kampanye "${fundraiseDetail?.title}".`,
-        duration: 8000,
-      });
-
-      // Additional success toast for impact
-      setTimeout(() => {
-        addToast({
-          type: "info",
-          title: "💝 Dampak Donasi Anda",
-          description:
-            "Donasi Anda akan membantu mencapai target kampanye ini. Pantau terus perkembangannya!",
-          duration: 6000,
-        });
-      }, 1000);
-
-      setShowSuccess(true);
-      setSelectedAmount(null);
-      setCustomAmount("");
-      setErrorMessage("");
-    } catch (error: unknown) {
-      const err = error as { cause?: { cause?: { shortMessage?: string } } };
-      const errorMsg = err?.cause?.cause?.shortMessage || "Donation failed";
-
-      addToast({
-        type: "error",
-        title: "❌ Donasi Gagal",
-        description:
-          errorMsg === "User rejected the request."
-            ? "Transaksi dibatalkan oleh pengguna"
-            : errorMsg,
-        duration: 5000,
-      });
-
-      setErrorMessage(errorMsg);
-      setShowError(true);
-    } finally {
-      setIsDonating(false);
-    }
-  };
 
   // EARLY RETURN AFTER ALL HOOKS
   if (!fundraiseDetail) {
@@ -337,18 +202,8 @@ export default function DonatePage() {
                       </div>
                     </div>
                     <div className="text-center">
-                      {/* <<<<<<< Updated upstream
-  <div className="text-2xl font-bold text-[#6B46C1]">
-    {formatCurrency(
-      Math.max(
-        0,
-        Number(fundraiseDetail?.targetAmount) -
-        Number(fundraiseDetail?.accumulatedAmount)
-      )
-    )} */}
                       <div className="text-2xl font-bold text-purple-600">
                         {amountLeft > 0 ? formatCurrency(amountLeft) : 0}
-                        {/* >>>>>>> Stashed changes */}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Dibutuhkan
@@ -364,73 +219,9 @@ export default function DonatePage() {
                   <TabsTrigger value="updates">Update</TabsTrigger>
                   <TabsTrigger value="donors">Donatur</TabsTrigger>
                 </TabsList>
-                <TabsContent value="story" className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Tentang Kampanye Ini</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="prose max-w-none">
-                        <p className="text-muted-foreground mb-4">
-                          {fundraiseDetail?.description}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="updates" className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Update Terbaru</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">
-                        Belum ada update untuk kampanye ini.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="donors" className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Donatur Terbaru</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {donationHistories.length > 0 ? donationHistories.map((el, idx) =>
-                        <div key={idx} className="flex items-center gap-4 p-4 border rounded-lg">
-                          <Avatar>
-                            <AvatarImage
-                              src={`/placeholder.svg?height=40&width=40`}
-                            />
-                            <AvatarFallback>D{idx + 1}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="font-medium">
-                              <a
-                                href={`https://testnet.monadexplorer.com/address/${fundraiseDetail?.fundraiser}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {formatAddress(el.donor)}
-                              </a>
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {timeAgo(Number(el.timestamp))}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold text-blue-600">
-                              {formatCurrency(Number(el.amount) / 1e6)}
-                            </div>
-                          </div>
-                        </div>
-                      ) : <p className="text-muted-foreground">
-                        Belum ada update untuk kampanye ini.
-                      </p>
-                      }
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+                <DescriptionTab description={fundraiseDetail.description} />
+                <WithdrawalsTab withdrawals={withdrawals} />
+                <DonorsTab donationHistories={donationHistories} />
               </Tabs>
             </div >
 
@@ -468,194 +259,10 @@ export default function DonatePage() {
                         ? formatCurrency(Number(userBalance) / 1e6)
                         : "0 DON"}
                     </div>
-                    {/* <div className="text-sm text-blue-600 mt-2">
-                      Allowance:{" "}
-                      {userAllowance
-                        ? formatCurrency(Number(userAllowance))
-                        : "0 DON"}
-                    </div> */}
                   </CardContent>
                 </Card>
               )}
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-red-500" />
-                    Berdonasi Sekarang
-                  </CardTitle>
-                  <CardDescription>
-                    Pilih jumlah donasi dan lakukan transaksi
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {!isConnected && (
-                    <Alert>
-                      <AlertTriangle className="h-4 w-4" />
-                      <AlertDescription>
-                        Silakan hubungkan wallet Anda untuk melakukan donasi.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  {!isActive && (
-                    <Alert>
-                      <AlertTriangle className="h-4 w-4" />
-                      <AlertDescription>
-                        Kampanye ini sudah berakhir dan tidak menerima donasi
-                        lagi.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  {showSuccess && (
-                    <Alert className="border-green-200 bg-green-50">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                      <AlertDescription className="text-green-700">
-                        Transaksi berhasil! Terima kasih atas kontribusi Anda.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  {showError && (
-                    <Alert className="border-red-200 bg-red-50">
-                      <AlertTriangle className="h-4 w-4 text-red-600" />
-                      <AlertDescription className="text-red-700">
-                        {errorMessage}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  <div className="space-y-3">
-                    <Label>Pilih Jumlah Donasi</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {donationAmounts.map((amount) => (
-                        <Button
-                          key={amount}
-                          variant={
-                            selectedAmount === amount ? "default" : "outline"
-                          }
-                          className="h-12"
-                          onClick={() => {
-                            setSelectedAmount(amount);
-                            setCustomAmount("");
-                          }}
-                          disabled={!isConnected || !isActive}
-                        >
-                          {formatCurrency(amount)}
-                        </Button>
-                      ))}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="custom-amount">
-                        Atau masukkan jumlah lain
-                      </Label>
-                      <Input
-                        id="custom-amount"
-                        type="number"
-                        placeholder="Masukkan jumlah"
-                        value={customAmount}
-                        onChange={(e) => {
-                          setCustomAmount(e.target.value);
-                          setSelectedAmount(null);
-                        }}
-                        disabled={!isConnected || !isActive}
-                      />
-                    </div>
-                  </div>
-
-                  {finalAmount > 0 &&
-                    isConnected &&
-                    userBalance !== undefined && (
-                      <div
-                        className={`p-4 rounded-lg border ${hasSufficientBalance
-                          ? "bg-green-50 border-green-200"
-                          : "bg-red-50 border-red-200"
-                          }`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">Saldo mencukupi:</span>
-                          <span
-                            className={`text-lg font-bold ${hasSufficientBalance
-                              ? "text-green-600"
-                              : "text-red-600"
-                              }`}
-                          >
-                            {hasSufficientBalance ? "✓" : "✗"}
-                          </span>
-                        </div>
-                        {!hasSufficientBalance && (
-                          <p className="text-sm text-red-600 mt-1">
-                            Saldo tidak mencukupi. Anda perlu{" "}
-                            {formatCurrency(finalAmount - Number(userBalance))}{" "}
-                            DON lagi.
-                          </p>
-                        )}
-                      </div>
-                    )
-                  }
-
-                  {finalAmount > 0 && (
-                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Total Donasi:</span>
-                        <span className="text-xl font-bold text-[#6B46C1]">
-                          {formatCurrency(finalAmount)}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {
-                    isConnected &&
-                    isActive &&
-                    finalAmount > 0 &&
-                    hasSufficientBalance && (
-                      <div className="space-y-3">
-                        {needsApproval && (
-                          <Button
-                            className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 h-12 text-lg"
-                            onClick={handleApprove}
-                            disabled={isApproving}
-                          >
-                            {isApproving ? (
-                              <>
-                                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                                Menyetujui...
-                              </>
-                            ) : (
-                              <>
-                                <Shield className="w-5 h-5 mr-2" />
-                                Setujui Token ({formatCurrency(finalAmount)})
-                              </>
-                            )}
-                          </Button>
-                        )}
-                        {!needsApproval && (
-                          <Button
-                            className="w-full bg-gradient-to-r from-[#6B46C1] to-purple-800 hover:from-purple-700 hover:to-purple-900 h-12 text-lg"
-                            onClick={handleDonate}
-                            disabled={isDonating}
-                          >
-                            {isDonating ? (
-                              <>
-                                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                                Mendonasi...
-                              </>
-                            ) : (
-                              <>
-                                <Heart className="w-5 h-5 mr-2" />
-                                Donasi {formatCurrency(finalAmount)}
-                              </>
-                            )}
-                          </Button>
-                        )}
-                      </div>
-                    )
-                  }
-
-                  <p className="text-xs text-center text-muted-foreground">
-                    Dengan berdonasi, Anda menyetujui syarat dan ketentuan
-                    platform
-                  </p>
-                </CardContent >
-              </Card >
+              <DonateCard fundraiseDetail={fundraiseDetail} />
 
               <Card className="border-green-200 bg-green-50">
                 <CardHeader>
